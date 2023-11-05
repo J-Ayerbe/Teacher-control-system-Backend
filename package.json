@@ -19,7 +19,10 @@
   },
   "homepage": "https://github.com/JulianRuano/EvaluationManagementSystem-Backend#readme",
   "dependencies": {
-    "express": "4.18.2"
+    "dotenv": "^16.3.1",
+    "express": "4.18.2",
+    "mysql2": "^3.6.3",
+    "sequelize": "^6.34.0"
   },
   "devDependencies": {
     "@types/express": "4.17.20",

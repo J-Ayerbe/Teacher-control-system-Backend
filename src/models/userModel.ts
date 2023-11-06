@@ -1,84 +1,91 @@
-
-
 export class userModel {
+  private usuId: number | undefined;
+  private id: number;
   private name: string;
   private lastName: string;
   private typeID: string;
-  private id: number;
+  private typeEducator: string | null;
   private email: string;
   private password: string;
   private title: string;
 
-  constructor() {
-    this.name = 'juan';
-    this.lastName = 'pepe';
-    this.typeID = 'cc';
-    this.id = 0;
-    this.email = 'juan@gmail.com';
-    this.password = '12345';
-    this.title = 'TC';
+
+  constructor(
+    usuId: number | undefined,
+    id: number,
+    name: string,
+    lastName: string,
+    typeID: string,
+    typeEducator: string | null,
+    email: string,
+    password: string,
+    title: string
+  ) {
+    this.usuId = usuId;
+    this.id = id;
+    this.name = name;
+    this.lastName = lastName;
+    this.typeID = typeID;
+    this.typeEducator = typeEducator;
+    this.email = email;
+    this.password = password;
+    this.title = title;
   }
 
-    getName() {
-        return this.name;
-    }
 
-    getLastName() {
-        return this.lastName;
-    }
-
-    getTypeID() {
-        return this.typeID;
-    }
-
-    getId() {
-        return this.id;
-    }
-
-    getEmail() {
-        return this.email;
-    }
-
-    getPassword() {
-        return this.password;
-    }
-
-    getTitle() {
-        return this.title;
-    }
-
-    setName(name: string) {
-        this.name = name;
-    }
-
-    setLastName(lastName: string) {
-        this.lastName = lastName;
-    }
-
-    setTypeID(typeID: string) {
-        this.typeID = typeID;
-    }
-
-    setId(id: number) {
-        this.id = id;
-    }
-
-    setEmail(email: string) {
-        this.email = email;
-    }
-
-    setPassword(password: string) {
-        this.password = password;
-    }
-
-    setTitle(title: string) {
-        this.title = title;
-    }
-
-    toString() {
-        return `User: ${this.name} ${this.lastName} ${this.typeID} ${this.id} ${this.email} ${this.password} ${this.title}`;
-    }
-
+   public getUsuId(): number | undefined {
+    return this.usuId;
+  }
+  public setUsuId(usuId: number): void {
+    this.usuId = usuId;
+  }
+  public getId(): number {
+    return this.id;
+  }
+  public setId(id: number): void {
+    this.id = id;
+  }
+  public getName(): string {
+    return this.name;
+  }
+  public setName(name: string): void {
+    this.name = name;
+  }
+  public getLastName(): string {
+    return this.lastName;
+  }
+  public setLastName(lastName: string): void {
+    this.lastName = lastName;
+  }
+  public getTypeID(): string {
+    return this.typeID;
+  }
+  public setTypeID(typeID: string): void {
+    this.typeID = typeID;
+  }
+  public getTypeEducator(): string | null {
+    return this.typeEducator;
+  }
+  public setTypeEducator(typeEducator: string | null): void {
+    this.typeEducator = typeEducator;
+  }
+  public getEmail(): string {
+    return this.email;
+  }
+  public setEmail(email: string): void {
+    this.email = email;
+  }
+  public getPassword(): string {
+    return this.password;
+  }
+  public setPassword(password: string): void {
+    this.password = password;
+  }
+  public getTitle(): string {
+    return this.title;
+  }
+  public setTitle(title: string): void {
+    this.title = title;
+  }
 
 }
-

@@ -4,4 +4,4 @@ import { workController } from '../controllers/workControllers'
 
 export const workRouter = Router()
 
-workRouter.get('/work', workController.getWork)
+workRouter.get('/getWork', workController.getWork)

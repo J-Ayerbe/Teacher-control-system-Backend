@@ -6,5 +6,5 @@ export class UserController{
         const user = new userModel();
         res.status(200).json({ user });
     }
-
+   
 }

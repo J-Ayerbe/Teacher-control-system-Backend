@@ -1,72 +1,34 @@
+import { Schema, model } from "mongoose";
+import { Period } from "./interfaces/interfaces";
 
+const PeriodSchema = new Schema<Period>({
+  name: {
+    type: String,
+    required: true,
+  },
+  year: {
+    type: Number,
+    required: true,
+  },
+  semester: {
+    type: Number,
+    required: true,
+    enum: [1, 2],
+  },
+  startDate: {
+    type: Date,
+    required: true,
+  },
+  endDate: {
+    type: Date,
+    required: true,
+  },
+});
 
-export class periodModel {
-    private id: number;
-    private name: string;
-    private year: string;
-    private semester: number;
-    private startDate: Date;
-    private endDate: Date;
+PeriodSchema.methods.toJSON = function () {
+  const { __v, _id, ...period } = this.toObject();
+  period.uid = _id;
+  return period;
+};
 
-    //Creamos el contructor
-    constructor() {
-        this.id = 0;
-        this.name = '';
-        this.year = '';
-        this.semester = 0;
-        this.startDate = new Date();
-        this.endDate = new Date();
-    }
-
-    //Getters
-    getId() {
-        return this.id;
-    }
-
-    getName() {
-        return this.name;
-    }
-
-    getYear() {
-        return this.year;
-    }
-
-    getSemester() {
-        return this.semester;
-    }
-
-    getStartDate() {
-        return this.startDate;
-    }
-
-    getEndDate() {
-        return this.endDate;
-    }
-
-    //Setters
-
-    setId(id: number) {
-        this.id = id;
-    }
-
-    setName(name: string) {
-        this.name = name;
-    }
-
-    setYear(year: string) {
-        this.year = year;
-    }
-
-    setSemester(semester: number) {
-        this.semester = semester;
-    }
-
-    setStartDate(startDate: Date) {
-        this.startDate = startDate;
-    }
-
-    setEndDate(endDate: Date) {
-        this.endDate = endDate;
-    }
-
-}
+export default model("Period", PeriodSchema);

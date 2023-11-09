@@ -4,9 +4,10 @@ const userSchema = z.object({
   id: z.string().min(4).max(10),
   name: z.string().min(3).max(50),
   lastName: z.string().min(3).max(50),
-  typeID: z.string().min(2).max(4),
-  typeEducator: z.number(),
+  idType: z.string().min(2).max(4),
+  typeUser: z.string(),
   email: z.string().email("Not a valid email"),
+  gender: z.string(),
   password: z
     .string()
     .min(5, {

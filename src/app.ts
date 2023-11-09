@@ -1,20 +1,24 @@
+import { autoEvaluationRoute } from './routes/autoEvaluationRoute';
 import express from 'express';
-import { userRouter } from './routes/userRoute';
-import { workRouter } from './routes/workRoute';
+import { educatorRouter } from './routes/educatorRoute';
+import { labourRouter } from './routes/labourRoute';
 import { periodRouter } from './routes/periodRoute';
 import { notificationRouter } from './routes/notificationRoute';
 import cors from 'cors'
 import { authRouter } from './routes/authRouter';
 
 const app = express();
+//TODO: inicializar conexion a mongoDB
+
 app.use(cors({
     origin: 'http://localhost:5173'
 }));
 app.use(express.json());
-app.use('/api/works',workRouter);
-app.use('/api/users', userRouter);
+app.use('/api/labours',labourRouter);
+app.use('/api/educators', educatorRouter);
 app.use('/api/periods', periodRouter);
-app.use('/api/notification', notificationRouter)
+app.use('/api/notifications', notificationRouter)
+app.use('/api/autoEvaluations', autoEvaluationRoute)
 app.use('/api/auth', authRouter);
 
 

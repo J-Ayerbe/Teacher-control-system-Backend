@@ -1,57 +1,28 @@
+import { Schema, model } from "mongoose";
+import { Notification } from "./interfaces/interfaces";
 
-export class notificationModel {
-    private usuId: number;
-    private notFecha: string;
-    private notMensaje: string;
-    private notEstado: string;
+const NotificationSchema = new Schema<Notification>({
+    title:{
+        type:String,
+    },
+    content:{
+        type:String,
+        required:true
+    },
+    date:{
+        type:Date,
+        required:true
+    },
+    read:{
+        type:Boolean,
+        default:false
+    }
+});
 
-    // constructor(usuId: number, notFecha: Date, notMensaje: string, notEstado: string) {
-    //     this.usuId = usuId;
-    //     this.notFecha = notFecha;
-    //     this.notMensaje = notMensaje;
-    //     this.notEstado = notEstado;
-    // }
-    constructor() {
-        this.usuId = 1;
-        this.notFecha = "12/06/2023";
-        this.notMensaje = "Hola";
-        this.notEstado = "Activa";
-    }
+NotificationSchema.methods.toJSON = function () {
+  const { __v, _id, ...period } = this.toObject();
+  period.uid = _id;
+  return period;
+};
 
-    getUsuId(){
-        return this.usuId;
-    }
-    
-    setUsuId(value: number) {
-        this.usuId = value;
-    }
-    
-    getNotFecha() {
-        return this.notFecha;
-    }
-
-    setNotFecha(value: string) {
-        this.notFecha = value;
-    }
-
-    getNotMensaje() {
-        return this.notMensaje;
-    }
-
-    setNotMensaje(value: string) {
-        this.notMensaje = value;
-    }
-
-    getNotEstado() {
-        return this.notEstado;
-    }
-
-    setNotEstado(value: string) {
-        this.notEstado = value;
-    }
-
-    toString() {
-        return `Notification: ${this.usuId} ${this.notFecha} ${this.notMensaje} ${this.notEstado}`;
-    }
-
-}
+export default model("Notification", NotificationSchema);

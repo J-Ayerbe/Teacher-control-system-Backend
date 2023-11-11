@@ -4,13 +4,22 @@
 export class PeriodController {
     static async getPeriods(_req: any, res: any) {
         try {
-            const response = await fetch('http://127.0.0.1:8000/periodos');
+            const response = await fetch('http://127.0.0.1:8000/periods');
             const data = await response.json();
             res.status(200).json(data);      
         } catch (error) {
             res.status(500).json({ error: error });         
         }
+    }
 
+    static async getPeriodById(req: any, res: any) {
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/period/${req.params.id}`);
+            const data = await response.json();
+            res.status(200).json(data);
+        } catch (error) {
+            res.status(500).json({ error: error });
+        }
     }
 
 }

@@ -1,10 +1,20 @@
-import { Response } from "express";
+import { PeriodController } from "./periodController";
+//import { LaboralController } from "./laboralController";
+//import { NotificationController } from "./notificationController";
+//import { model } from "mongoose";
 
 
-export class AutoEvaluationController {
-  static async test(_req: any, res: Response) {
-    return res.status(200).json({
-      ok: true,
-    });
+//Este controlador actuara como una fachada para el servicio de autoevaluacion
+//Contiene a periodController, laboralController, notificacionController
+
+export class AutoEvaluationController{
+  static async getPeriod(req: any, res: any) {
+    return PeriodController.getPeriods(req, res);
   }
+
+  static async getPeriodById(req: any, res: any) {
+    return PeriodController.getPeriodById(req, res);
+  }
+
 }
+

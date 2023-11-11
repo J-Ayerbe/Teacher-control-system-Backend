@@ -4,4 +4,5 @@ import { AutoEvaluationController } from '../controllers/autoEvaluationControlle
 
 export const autoEvaluationRoute = Router()
 
-autoEvaluationRoute.post('/createAutoEvaluation',AutoEvaluationController.test)
+autoEvaluationRoute.get('/periods',AutoEvaluationController.getPeriod)
+autoEvaluationRoute.get('/period/:id',AutoEvaluationController.getPeriodById)

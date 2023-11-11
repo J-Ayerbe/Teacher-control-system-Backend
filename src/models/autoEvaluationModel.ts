@@ -39,7 +39,8 @@ const AutoEvaluationSchema = new Schema<AutoEvaluation>({
         enum:[0,1]
     },
     observation:{
-        type:String
+        type:String,
+        "zxd":String,
     },
     labour:{
         type:Types.ObjectId,

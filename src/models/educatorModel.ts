@@ -22,11 +22,6 @@ const EducatorSchema = new Schema<Educator>({
     type: String,
     required: true,
   },
-  educatorType: {
-    type: String,
-    enum: ['Catedra', 'Tiempo Completo', 'Planta'],
-    required: true,
-  },
   title: {
     type: String,
   },
@@ -34,6 +29,10 @@ const EducatorSchema = new Schema<Educator>({
     type: String,
     required: true,
   },
+  labours:[{
+    type: Types.ObjectId,
+      ref: "Labours",
+  }],
   joinDate: {
     type: Date,
     default: Date.now,
@@ -66,4 +65,4 @@ EducatorSchema.methods.toJSON = function () {
   return user;
 };
 
-export default model("User", EducatorSchema);
+export default model("Educator", EducatorSchema);

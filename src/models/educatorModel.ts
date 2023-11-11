@@ -14,9 +14,21 @@ const EducatorSchema = new Schema<IEducator>({
   },
   password: {
     type: String,
+    required:true,
   },
   gender: {
     type: String,
+  },
+  docentType: {
+    type: String,
+    enum:["Tiempo Completo", "Planta", "Cátedra"],
+    validate: {
+      validator: function() {
+        // If role is "Docente", docentType must be provided
+        return !(this.role === "Docente" && !this.docentType);
+      },
+      message: "docentType is required when role is Docente"
+    }
   },
   idType: {
     type: String,
@@ -43,7 +55,8 @@ const EducatorSchema = new Schema<IEducator>({
   },
   role:{
     type:String,
-    required:true
+    required:true,
+    enum:["Coordinador","Decano","Docente"]
   },
   notifications: [
     {

@@ -6,19 +6,32 @@ export interface Period {
   endDate:Date
 }
 
+enum DocentType {
+  TC = "Tiempo Completo",
+  Planta = "Planta",
+  Catedra = "Cátedra",
+}
+
+enum EducatorRole {
+  Docente = "Docente",
+  Decano = "Decano",
+  Coordinador = "Coordinador",
+}
+
 export interface Educator {
   id:number,
   email:string,
   password:string,
   gender:string,
   idType:string,
+  docentType:DocentType,
   title:string,
   lastName:string,
   joinDate:Date,
   picture:string,
   notifications:Notification[],
   labours:Labour[],
-  role:string,
+  role:EducatorRole,
   autoEvaluations:AutoEvaluation[]
 }
 

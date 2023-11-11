@@ -1,7 +1,7 @@
-import { Educator } from "./interfaces/interfaces";
+import { Educator as IEducator } from "./interfaces/interfaces";
 import { Schema, model, Types } from "mongoose";
 
-const EducatorSchema = new Schema<Educator>({
+const EducatorSchema = new Schema<IEducator>({
   id: {
     type: Number,
     sparse: true,
@@ -65,4 +65,4 @@ EducatorSchema.methods.toJSON = function () {
   return user;
 };
 
-export default model("Educator", EducatorSchema);
+export const Educator = model("Educator", EducatorSchema);

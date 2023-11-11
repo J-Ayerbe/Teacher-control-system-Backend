@@ -1,6 +1,7 @@
 import {Schema,model} from "mongoose";
+import { LabourType as ILabourType } from "./interfaces/interfaces";
 
-const LabourTypeSchema = new Schema({
+const LabourTypeSchema = new Schema<ILabourType>({
   id: {
     type: Number,
     min: 1,
@@ -19,4 +20,5 @@ const LabourTypeSchema = new Schema({
   },
 });
 
-export default model("LabourType", LabourTypeSchema);
+
+export const LabourType = model("LabourType", LabourTypeSchema);

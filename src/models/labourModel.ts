@@ -1,7 +1,7 @@
 import { Schema, model, Types } from "mongoose";
-import { Labour } from "./interfaces/interfaces";
+import { Labour as ILabour } from "./interfaces/interfaces";
 
-const LabourSchema = new Schema<Labour>({
+const LabourSchema = new Schema<ILabour>({
   description: {
     type: String,
     required: true,
@@ -27,4 +27,4 @@ const LabourSchema = new Schema<Labour>({
   ],
 });
 
-export default model("Labour", LabourSchema);
+export const Labour = model("Labour", LabourSchema);

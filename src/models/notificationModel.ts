@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
-import { Notification } from "./interfaces/interfaces";
+import { Notification as INotification } from "./interfaces/interfaces";
 
-const NotificationSchema = new Schema<Notification>({
+const NotificationSchema = new Schema<INotification>({
     title:{
         type:String,
     },
@@ -25,4 +25,5 @@ NotificationSchema.methods.toJSON = function () {
   return period;
 };
 
-export default model("Notification", NotificationSchema);
+
+export const Notification = model("Notification", NotificationSchema);

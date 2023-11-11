@@ -1,7 +1,7 @@
 import { Schema, model,Types } from "mongoose";
-import { AutoEvaluation } from "./interfaces/interfaces";
+import { AutoEvaluation as IAutoEvaluation } from "./interfaces/interfaces";
 
-const AutoEvaluationSchema = new Schema<AutoEvaluation>({
+const AutoEvaluationSchema = new Schema<IAutoEvaluation>({
     state:{
         type:String,
         required:true,
@@ -58,4 +58,4 @@ AutoEvaluationSchema.methods.toJSON = function () {
   return autoEvaluation;
 };
 
-export default model("AutoEvaluation", AutoEvaluationSchema);
+export const AutoEvaluation = model("AutoEvaluation", AutoEvaluationSchema);

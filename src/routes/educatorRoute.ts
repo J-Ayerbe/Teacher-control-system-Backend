@@ -8,4 +8,6 @@ export const educatorRouter = Router()
 
 //crear el docente
 //TODO: verificar token
-educatorRouter.post('/createEducator',[validateSchema(educatorSchema)], EducatorController.createUser)
+educatorRouter.post('/createEducator',[validateSchema(educatorSchema)], EducatorController.createEducator)
+
+educatorRouter.get('/createEducator/:id', EducatorController.getEducator)

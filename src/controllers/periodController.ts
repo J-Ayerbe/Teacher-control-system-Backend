@@ -1,4 +1,5 @@
-import Period from "../models/periodModel";
+import { Period } from './../models/periodModel';
+
 //Pide los datos a una api externa
 //Que se encuentra en el siguiente link: http://127.0.0.1:8000/periodos
 import { Response,Request } from "express";

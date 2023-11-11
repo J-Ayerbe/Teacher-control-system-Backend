@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
-import { Period } from "./interfaces/interfaces";
+import { Period as IPeriod } from "./interfaces/interfaces";
 
-const PeriodSchema = new Schema<Period>({
+const PeriodSchema = new Schema<IPeriod>({
   name: {
     type: String,
     required: true,
@@ -31,4 +31,4 @@ PeriodSchema.methods.toJSON = function () {
   return period;
 };
 
-export default model("Period", PeriodSchema);
+export const Period = model("Period", PeriodSchema);

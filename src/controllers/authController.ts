@@ -7,4 +7,10 @@ export class AuthController {
       ok: true,
     });
   }
+    static async logout(_req: any, res: Response) {
+    //TODO: check token
+    return res.status(200).json({
+      ok: true,
+    });
+  }
 }

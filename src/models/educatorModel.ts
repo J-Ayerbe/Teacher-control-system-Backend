@@ -31,7 +31,7 @@ const EducatorSchema = new Schema<IEducator>({
   },
   labours:[{
     type: Types.ObjectId,
-      ref: "Labours",
+      ref: "Labour",
   }],
   joinDate: {
     type: Date,

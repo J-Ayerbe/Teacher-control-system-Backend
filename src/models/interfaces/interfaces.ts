@@ -22,7 +22,6 @@ export interface Educator {
   autoEvaluations:AutoEvaluation[]
 }
 
-
 export interface Notification{
   title:string,
   content:string,
@@ -52,6 +51,7 @@ export interface Labour{
   autoEvaluations:AutoEvaluation[],
   isActive:boolean
 }
+
 export interface LabourType{
   id:number,
   code:string,

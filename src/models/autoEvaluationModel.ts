@@ -40,7 +40,6 @@ const AutoEvaluationSchema = new Schema<IAutoEvaluation>({
     },
     observation:{
         type:String,
-        "zxd":String,
     },
     labour:{
         type:Types.ObjectId,

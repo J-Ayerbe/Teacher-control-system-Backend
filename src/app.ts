@@ -1,6 +1,6 @@
 import { autoEvaluationRoute } from './routes/autoEvaluationRoute';
 import express from 'express';
-import dbConnection from './db/config';
+import dbConnection from './config/dbConfig';
 import { educatorRouter } from './routes/educatorRoute';
 import { labourRouter } from './routes/labourRoute';
 import { periodRouter } from './routes/periodRoute';
@@ -8,6 +8,7 @@ import { notificationRouter } from './routes/notificationRoute';
 import cors from 'cors'
 import dotenv from "dotenv"
 import { authRouter } from './routes/authRouter';
+import { errorHandler } from './helpers/errorHandler';
 
 const envFile =
   process.env.NODE_ENV === "production"
@@ -28,7 +29,7 @@ app.use('/api/periods', periodRouter);
 app.use('/api/notifications', notificationRouter)
 app.use('/api/autoEvaluations', autoEvaluationRoute)
 app.use('/api/auth', authRouter);
-
+app.use(errorHandler);
 
 app.listen(3000, () => {
     console.log('Server is running on port 3000');

@@ -19,11 +19,11 @@
   },
   "homepage": "https://github.com/JulianRuano/EvaluationManagementSystem-Backend#readme",
   "dependencies": {
+    "class-validator": "^0.14.0",
     "cors": "^2.8.5",
     "express": "4.18.2",
+    "jwt-redis": "^7.0.3",
     "mongoose": "^8.0.0",
-    "mysql2": "^3.6.3",
-    "sequelize": "^6.34.0",
     "tslib": "^2.6.2",
     "zod": "^3.22.4"
   },

@@ -3,4 +3,4 @@ import { PeriodController } from '../controllers/periodController'
 
 export const periodRouter = Router()
 
-periodRouter.post('/createPeriod', PeriodController.createPeriod)
+periodRouter.post('/createPeriod', PeriodController.getPeriods)

@@ -25,7 +25,7 @@ export interface Educator {
   id:number,
   email:string,
   password:string,
-  gender:string,
+  isActive:boolean
   idType:string,
   docentType:DocentType,
   title:string,

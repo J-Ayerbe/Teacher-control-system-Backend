@@ -18,9 +18,6 @@ const EducatorSchema = new Schema<IEducator>({
     type: String,
     required:true,
   },
-  gender: {
-    type: String,
-  },
   docentType: {
     type: String,
     enum:["Tiempo Completo", "Planta", "Cátedra"],
@@ -35,6 +32,10 @@ const EducatorSchema = new Schema<IEducator>({
   idType: {
     type: String,
     required: true,
+  },
+  isActive: {
+    type: Boolean,
+    default: true,
   },
   title: {
     type: String,

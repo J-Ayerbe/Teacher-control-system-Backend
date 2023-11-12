@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, model,Types } from "mongoose";
 import { Period as IPeriod } from "./interfaces/interfaces";
 import { v4 as uuidv4 } from 'uuid';
 
@@ -12,6 +12,10 @@ const PeriodSchema = new Schema<IPeriod>({
     type: Number,
     required: true,
   },
+  autoEvaluations: [{
+    type: Types.ObjectId,
+    ref: "AutoEvaluation",
+  }],
   semester: {
     type: Number,
     required: true,

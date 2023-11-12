@@ -4,7 +4,8 @@ export interface Period {
   year:number,
   semester:number,
   startDate:Date,
-  endDate:Date
+  endDate:Date,
+  autoEvaluations:AutoEvaluation[]
 }
 
 enum DocentType {

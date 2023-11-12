@@ -1,6 +1,6 @@
 import { periodController } from "./periodController";
 import { labourController } from "./labourController";
-//import { NotificationController } from "./notificationController";
+import { NotificationController } from "./notificationController";
 import { Request,Response } from 'express';
 
 
@@ -37,6 +37,14 @@ class AutoEvaluationController{
   }
   async deleteLabour(req: Request, res: Response){
     return await labourController.deleteLabour(req, res);
+  }
+
+  // NotificationController
+  async sendEmail(req: Request, res: Response){
+    return await NotificationController.sendEmail(req, res);
+  }
+  async getNotification(req: Request, res: Response){
+    return await NotificationController.getNotification(req, res);
   }
 }
 

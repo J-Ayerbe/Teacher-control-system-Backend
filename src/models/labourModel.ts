@@ -1,7 +1,9 @@
 import { Schema, model, Types } from "mongoose";
 import { Labour as ILabour } from "./interfaces/interfaces";
+import { v4 as uuidv4 } from 'uuid';
 
 const LabourSchema = new Schema<ILabour>({
+  _id: { type: String, default: uuidv4, immutable: true },
   description: {
     type: String,
     required: true,

@@ -1,7 +1,9 @@
 import { Schema, model,Types } from "mongoose";
 import { AutoEvaluation as IAutoEvaluation } from "./interfaces/interfaces";
+import { v4 as uuidv4 } from 'uuid';
 
 const AutoEvaluationSchema = new Schema<IAutoEvaluation>({
+     _id: { type: String, default: uuidv4, immutable: true },
     state:{
         type:String,
         required:true,

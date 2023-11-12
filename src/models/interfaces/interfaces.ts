@@ -1,4 +1,5 @@
 export interface Period {
+  readonly _id?: string;
   name:string,
   year:number,
   semester:number,
@@ -19,6 +20,7 @@ enum EducatorRole {
 }
 
 export interface Educator {
+  readonly _id?: string;
   id:number,
   email:string,
   password:string,
@@ -36,6 +38,7 @@ export interface Educator {
 }
 
 export interface Notification{
+  readonly _id?: string;
   title:string,
   content:string,
   date:Date,
@@ -43,6 +46,7 @@ export interface Notification{
 }
 
 export interface AutoEvaluation{
+  readonly _id?: string;
   state:string,
   puntuation:number,
   date:Date,
@@ -57,6 +61,7 @@ export interface AutoEvaluation{
 }
 
 export interface Labour{
+  readonly _id?: string;
   description:string,
   hours:number,
   labourType:LabourType,
@@ -66,6 +71,7 @@ export interface Labour{
 }
 
 export interface LabourType{
+  readonly _id?: string;
   id:number,
   code:string,
   description:string,

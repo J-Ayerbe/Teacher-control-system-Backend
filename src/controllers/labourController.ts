@@ -1,10 +1,24 @@
-import { Response } from "express";
+import { ILabourController } from "../types/IlabourController";
+import { Request,Response } from 'express';
 
-
-export class LabourController {
-  static async test(_req: any, res: Response) {
-    return res.status(200).json({
-      ok: true,
-    });
+class LabourController implements ILabourController  {
+  async getLabours(_req: Request, res:Response){
+    res.status(200).json({ message: "getLabours" });
   }
+  async getLabourById(_req: Request, res: Response){
+    res.status(200).json({ message: "getLabourById" });     
+  }
+  async createLabour(_req: Request, res: Response){
+    res.status(200).json({ message: "createLabour" });
+  }
+  async updateLabour(_req: Request, res: Response){
+    res.status(200).json({ message: "updateLabour" });
+  }
+
+  async deleteLabour(_req: Request, res: Response){
+    res.status(200).json({ message: "deleteLabour" });
+  }
+
 }
+
+export const labourController = new LabourController();

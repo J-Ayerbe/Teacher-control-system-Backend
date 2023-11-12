@@ -59,6 +59,7 @@ export interface AutoEvaluation{
   observation?:string,
   labour:Labour,
   evidencesLink:string,
+  period:Period
 }
 
 export interface Labour{

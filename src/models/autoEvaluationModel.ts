@@ -15,6 +15,11 @@ const AutoEvaluationSchema = new Schema<IAutoEvaluation>({
         min:0,
         max:100
     },
+    period:{
+        type:Types.ObjectId,
+        ref:"Period",
+        required:true
+    },
     date:{
         type:Date,
         required:true

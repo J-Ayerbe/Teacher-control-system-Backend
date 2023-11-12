@@ -17,6 +17,10 @@ class AutoEvaluationController{
     return await periodController.getPeriodById(req, res);  
   }
 
+  async createPeriod(req: Request, res: Response) {
+    return await periodController.createPeriod(req, res);
+  }
+
   // LabourController
 
   async getLabours(req: Request, res: Response){

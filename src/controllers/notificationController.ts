@@ -1,5 +1,5 @@
 import { Response } from "express";
-import nodemailer from 'nodemailer';
+const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
   host: process.env.EMAIL_HOST,
@@ -8,7 +8,7 @@ const transporter = nodemailer.createTransport({
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
-  },
+  }
 });
 
 export class NotificationController {
@@ -23,8 +23,8 @@ export class NotificationController {
             await transporter.sendMail({             
                 from: msj,
                 to: data.email,
-                subject: "Notificacion de prueba",
-                html: `<p>${data.message}</p>`,
+                subject: "Notification from AutoEvaluation",
+                html: `<p>${data.content}</p>`,
             });
             res.status(200).json({ message: "Email sent" });
         }

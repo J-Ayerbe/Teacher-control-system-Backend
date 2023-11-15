@@ -33,6 +33,10 @@ const EducatorSchema = new Schema<IEducator>({
     type: String,
     required: true,
   },
+  isActive: {
+    type: Boolean,
+    default: true,
+  },
   title: {
     type: String,
   },

@@ -1,10 +1,12 @@
-import { EducatorController } from './../controllers/educatorController';
+import { educatorController } from './../controllers/educatorController';
+
 import { Router } from 'express'
 
 export const educatorRouter = Router()
 
-//crear el docente
 //TODO: verificar token
-educatorRouter.post('/createEducator', EducatorController.createEducator)
+educatorRouter.post('/createEducator', educatorController.createEducator)
 
-educatorRouter.get('/getEducator/:id', EducatorController.getEducator)
+educatorRouter.get('/getEducator/:id', educatorController.getEducatorById)
+
+educatorRouter.get('/getEducators', educatorController.getEducators)

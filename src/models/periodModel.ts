@@ -9,7 +9,7 @@ const PeriodSchema = new Schema<IPeriod>({
     required: true,
   },
   year: {
-    type: Number,
+    type:String,
     required: true,
   },
   autoEvaluations: [{

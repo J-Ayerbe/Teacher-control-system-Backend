@@ -1,7 +1,7 @@
 export interface Period {
   readonly _id?: string;
   name:string,
-  year:number,
+  year:string,
   semester:number,
   startDate:Date,
   endDate:Date,
@@ -22,13 +22,13 @@ enum EducatorRole {
 
 export interface Educator {
   readonly _id?: string;
-  id:number,
+  identification:string,
   email:string,
   password:string,
-  gender:string,
   idType:string,
   docentType:DocentType,
   title:string,
+  firstName:string,
   lastName:string,
   joinDate:Date,
   picture:string,
@@ -55,7 +55,7 @@ export interface AutoEvaluation{
   evaluated:Educator,
   results:string,
   suggestions?:string,
-  act?:number,
+  act?:boolean,
   observation?:string,
   labour:Labour,
   evidencesLink:string,

@@ -42,7 +42,7 @@ const AutoEvaluationSchema = new Schema<IAutoEvaluation>({
         type:String
     },
     act:{
-        type:Number,
+        type:Boolean,
         enum:[0,1]
     },
     observation:{

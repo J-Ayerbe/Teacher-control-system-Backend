@@ -4,8 +4,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 const EducatorSchema = new Schema<IEducator>({
   _id: { type: String, default: uuidv4, immutable: true },
-  id: {
-    type: Number,
+  identification: {
+    type: String,
     sparse: true,
     unique: true,
   },
@@ -17,9 +17,6 @@ const EducatorSchema = new Schema<IEducator>({
   password: {
     type: String,
     required:true,
-  },
-  gender: {
-    type: String,
   },
   docentType: {
     type: String,
@@ -38,6 +35,10 @@ const EducatorSchema = new Schema<IEducator>({
   },
   title: {
     type: String,
+  },
+  firstName:{
+    type: String,
+    required: true,
   },
   lastName: {
     type: String,

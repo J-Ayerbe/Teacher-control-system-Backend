@@ -1,17 +1,27 @@
-import { Educator } from './../models/educatorModel';
-import {Request, Response} from "express";
+import { IEducatorController } from "../types/IeducatorController";
+import { Request,Response } from 'express';
 
 
-export class EducatorController {
-    static async createEducator(req:Request, res: Response){
-        const educator= new Educator(req.body)
-        await educator.save();
-        res.status(201).json({ educator });
+class EducatorController implements IEducatorController {
+    async getEducators(_req: Request, res:Response){
+        res.status(200).json({ message: "getEducators" });
     }
 
-    static async getEducator(req:Request, res: Response){
-        const {id}=req.params;
-        const educator= await Educator.findById(id);
-        res.status(200).json({ educator });
+    async getEducatorById(_req: Request, res:Response){
+        res.status(200).json({ message: "getEducatorById" });
+    }
+
+    async createEducator(_req: Request, res:Response){
+        res.status(200).json({ message: "createEducator" });
+    }
+
+    async updateEducator(_req: Request, res:Response){
+        res.status(200).json({ message: "updateEducator" });
+    }
+
+    async deleteEducator(_req: Request, res:Response){
+        res.status(200).json({ message: "deleteEducator" });
     }
 }
+
+export const educatorController = new EducatorController();

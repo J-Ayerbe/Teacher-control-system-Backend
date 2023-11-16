@@ -20,8 +20,7 @@ export class NotificationController {
   }
 
   static async createNotification(req: Request, res: Response) {
-        const { title, content, email , date } = req.body;
-        const data = new Notification({ title, content, email , date });
+        const data = new Notification(req.body);
         await data.save();
 
         return res.status(201).json({

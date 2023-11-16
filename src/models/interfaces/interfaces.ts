@@ -69,8 +69,9 @@ export interface Labour{
   hours:number,
   labourType:LabourType,
   assignedHours:number
-  autoEvaluations:AutoEvaluation[],
-  isActive:boolean
+  isActive:boolean,
+  code:string,
+  idLabourType:number
 }
 
 export interface LabourType{

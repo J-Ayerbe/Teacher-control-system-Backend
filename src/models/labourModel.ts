@@ -4,29 +4,31 @@ import { v4 as uuidv4 } from 'uuid';
 
 const LabourSchema = new Schema<ILabour>({
   _id: { type: String, default: uuidv4, immutable: true },
-  description: {
-    type: String,
-    required: true,
-  },
   isActive:{
     type:Boolean,
-    required:true
+    required:true,
   },
   labourType: {
     type: Types.ObjectId,
     ref:"LabourType",
     required: true,
   },
+  idLabourType:{
+    type:Number,
+    requerid:true,
+  },
+  code:{
+    type:String,
+    requerid:true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
   assignedHours: {
     type: Number,
     required: true,
   },
-  autoEvaluations: [
-    {
-      type: Types.ObjectId,
-      ref: "AutoEvaluation",
-    },
-  ],
 });
 
 export const Labour = model("Labour", LabourSchema);

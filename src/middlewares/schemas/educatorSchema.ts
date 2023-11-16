@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const userSchema = z.object({
-  id: z.string().min(5).max(11),
+  identification: z.string().min(5).max(11),
   email: z.string().email("Not a valid email"),
   password: z.string().min(5, {
     message: "Password must be at least 5 characters long",

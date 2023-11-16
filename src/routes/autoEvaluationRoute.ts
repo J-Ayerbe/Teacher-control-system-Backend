@@ -1,18 +1,22 @@
 import { Router} from 'express'
 import { autoEvaluationController } from '../controllers/autoEvaluationController';
-import { Request,Response } from 'express';
+import validateSchema from "../middlewares/validateSchema";
+import  notificationSchema from '../middlewares/schemas/notificationSchema';
+import sendEmailSchema from '../middlewares/schemas/sendEmailSchema';
+import periodSchema from '../middlewares/schemas/periodShemas';
 
 
 export const autoEvaluationRoute = Router()
-
-autoEvaluationRoute.get('/periods', (req:Request, res:Response) => autoEvaluationController.getPeriods(req, res))
-autoEvaluationRoute.get('/period/:id', (req:Request, res:Response) => autoEvaluationController.getPeriodById(req, res))
-autoEvaluationRoute.post('/period', (req:Request, res:Response) => autoEvaluationController.createPeriod(req, res))
-
-autoEvaluationRoute.get('/labours', (req:Request, res:Response) => autoEvaluationController.getLabours(req, res))
-autoEvaluationRoute.get('/labour/:id', (req:Request, res:Response) => autoEvaluationController.getLabourById(req, res))
-autoEvaluationRoute.post('/labour', (req:Request, res:Response) => autoEvaluationController.createLabour(req, res))
-autoEvaluationRoute.put('/labour/:id', (req:Request, res:Response) => autoEvaluationController.updateLabour(req, res))
-autoEvaluationRoute.delete('/labour/:id', (req:Request, res:Response) => autoEvaluationController.deleteLabour(req, res))
-
-autoEvaluationRoute.post('/sendEmail', (req:Request, res:Response) => autoEvaluationController.sendEmail(req, res))
+//Periods
+autoEvaluationRoute.get('/periods', autoEvaluationController.getPeriods)
+autoEvaluationRoute.get('/period/:id', autoEvaluationController.getPeriodById)
+autoEvaluationRoute.post('/period',validateSchema(periodSchema), autoEvaluationController.createPeriod)
+//Labours
+autoEvaluationRoute.get('/labours', autoEvaluationController.getLabours)
+autoEvaluationRoute.get('/labour/:id', autoEvaluationController.getLabourById)
+autoEvaluationRoute.post('/labour', autoEvaluationController.createLabour)
+autoEvaluationRoute.put('/labour/:id', autoEvaluationController.updateLabour)
+autoEvaluationRoute.delete('/labour/:id', autoEvaluationController.deleteLabour)
+//Notifications
+autoEvaluationRoute.post('/sendEmail',validateSchema(sendEmailSchema), autoEvaluationController.sendEmail)
+autoEvaluationRoute.post('/createNotification', validateSchema(notificationSchema), autoEvaluationController.createNotification)

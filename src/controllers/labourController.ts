@@ -1,6 +1,6 @@
 import { ILabourController } from "../types/IlabourController";
 import { Request,Response } from 'express';
-import { Labour, Labour } from "../models/labourModel";
+import { Labour } from "../models/labourModel";
 
 
 class LabourController implements ILabourController  {
@@ -11,10 +11,10 @@ class LabourController implements ILabourController  {
     res.status(200).json({ message: "getLabourById" });     
   }
   async createLabour(req: Request, res: Response){
-    const {}=req.body;
-    const labour=new Labour(req.body)
+    const {isActive, idlabourType, code, description, assignedHours} = req.body;
+    const labour=new Labour({isActive, idlabourType, code, description, assignedHours})
     await labour.save();
-    res.status(200).json({ message: "createLabour" });
+    res.status(201).json({ message: "createLabour"});
   }
   async updateLabour(_req: Request, res: Response){
     res.status(200).json({ message: "updateLabour" });

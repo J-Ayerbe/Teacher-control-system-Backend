@@ -1,4 +1,4 @@
-import { AutoEvaluation } from './../models/interfaces/interfaces';
+
 import {
   refreshTokenCookieOptions,
   tokenCookieOptions,

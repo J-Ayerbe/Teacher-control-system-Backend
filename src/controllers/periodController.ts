@@ -1,12 +1,13 @@
 //Pide los datos a una api externa
 import { IPeriodController } from "../types/IperiodController";
 import { Response } from 'express';
+import { apiPeriodUrl } from "../helpers/apiPeriodUrl";
 
     
 class PeriodController implements IPeriodController{
     async getPeriods(_req: any, res: Response) {
         try {
-            const response = await fetch('http://127.0.0.1:8000/periods');
+            const response = await fetch(`${apiPeriodUrl}/periods`);
             const data = await response.json();
             res.status(200).json(data);      
         } catch (error) {
@@ -16,7 +17,7 @@ class PeriodController implements IPeriodController{
 
     async getPeriodById(req: any, res: any) {
         try {
-            const response = await fetch(`http://127.0.0.1:8000/period/${req.params.id}`);
+            const response = await fetch(`${apiPeriodUrl}/period/${req.params.id}`);
             const data = await response.json();
             res.status(200).json(data);
         } catch (error) {
@@ -27,7 +28,7 @@ class PeriodController implements IPeriodController{
     async createPeriod(req: any, res: any) {
         try {
             const data = req.body;
-            const apiUrl = 'http://127.0.0.1:8000/period';
+            const apiUrl = `${apiPeriodUrl}/period`;
 
             const response = await fetch(apiUrl, {
                 method: 'POST',

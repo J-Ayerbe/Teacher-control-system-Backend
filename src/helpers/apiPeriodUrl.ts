@@ -1,0 +1,1 @@
+export const apiPeriodUrl = process.env.API_PERIOD_URL

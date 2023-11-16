@@ -1,3 +1,4 @@
+
 import {
   refreshTokenCookieOptions,
   tokenCookieOptions,
@@ -72,7 +73,7 @@ export class AuthController {
         });
     } catch (error: any) {
       await session.abortTransaction();
-      console.error("Error registering user:", error.message);
+      console.error("Error registering user:", error);
       return res.status(500).json({ message: "Internal server error" });
     } finally {
       session.endSession();

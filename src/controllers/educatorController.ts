@@ -13,8 +13,10 @@ class EducatorController implements IEducatorController {
         res.status(200).json({ message: "getEducatorById" });
     }
 
-    async createEducator(_req: Request, res:Response){
-        res.status(200).json({ message: "createEducator" });
+    async createEducator(req: Request, res:Response){
+        const educator = new Educator(req.body);
+        await educator.save();
+        return res.status(201).json({ message: "Educator created" });
     }
 
     async updateEducator(_req: Request, res:Response){

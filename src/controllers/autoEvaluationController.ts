@@ -46,6 +46,10 @@ class AutoEvaluationController{
   async getNotification(req: Request, res: Response){
     return await NotificationController.getNotification(req, res);
   }
+
+  async createNotification(req: Request, res: Response){
+    return await NotificationController.createNotification(req, res);
+  }
 }
 
 export const autoEvaluationController = new AutoEvaluationController();

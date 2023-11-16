@@ -8,10 +8,10 @@ const userSchema = z.object({
   }).max(15, {
     message: "Password must be at most 15 characters long",
   }),
-  gender: z.string().optional(),
   docentType:z.enum(["Tiempo Completo", "Planta", "Cátedra"]),
   idType: z.string().min(2).max(10),
   title: z.string(),
+  firstName: z.string().min(1).max(50),
   lastName: z.string().min(3).max(50),
   role: z.enum(["Coordinador", "Decano", "Docente"]),
 });

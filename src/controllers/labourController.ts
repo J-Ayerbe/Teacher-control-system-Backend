@@ -6,10 +6,12 @@ class LabourController implements ILabourController  {
     res.status(200).json({ message: "getLabours" });
   }
   async getLabourById(_req: Request, res: Response){
-    res.status(200).json({ message: "getLabourById" });     
+    res.status(200).json({ message: "getLabourById" });
   }
-  async createLabour(_req: Request, res: Response){
-    res.status(200).json({ message: "createLabour" });
+  async createLabour(req: Request, res: Response){
+    const labour=new Labour(req.body)
+    await labour.save();
+    res.status(201).json({ message: "createLabour"});
   }
   async updateLabour(_req: Request, res: Response){
     res.status(200).json({ message: "updateLabour" });

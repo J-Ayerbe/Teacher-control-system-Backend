@@ -67,10 +67,11 @@ export interface Labour{
   readonly _id?: string;
   description:string,
   hours:number,
-  labourType:LabourType,
+  labourType:string,
   assignedHours:number
-  autoEvaluations:AutoEvaluation[],
-  isActive:boolean
+  isActive:boolean,
+  code:string,
+  idlabourType:number
 }
 
 export interface LabourType{

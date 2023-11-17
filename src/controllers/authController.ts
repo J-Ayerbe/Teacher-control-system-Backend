@@ -21,12 +21,12 @@ export class AuthController {
       const { email, password } = req.body;
       const educator = await Educator.findOne({ email });
       if (!educator) {
-        return next(new AppError("Credenciales inválidas", 401));
+        return next(new AppError("Credenciales incorrectas. Por favor, revisa e intenta de nuevo", 401));
       }
       const validPassword = bcrypt.compareSync(password, educator.password);
 
       if (!validPassword) {
-        return next(new AppError("Credenciales inválidas", 401));
+        return next(new AppError("Credenciales incorrectas. Por favor, revisa e intenta de nuevo", 401));
       }
       const { token, refreshToken } = await generateTokenAndRefreshToken(
         educator._id,

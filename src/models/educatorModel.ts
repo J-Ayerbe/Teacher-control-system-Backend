@@ -73,7 +73,8 @@ const EducatorSchema = new Schema<IEducator>({
   ],
     autoEvaluations: [
     {
-      type:String
+      type:String,
+      ref: "AutoEvaluation",
     },
   ],
 });

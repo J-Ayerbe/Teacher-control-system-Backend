@@ -25,12 +25,12 @@ const AutoEvaluationSchema = new Schema<IAutoEvaluation>({
         required:true
     },
     evaluator:{
-        type:Types.ObjectId,
+        type:String,
         ref:"Educator",
         required:true
     },
     evaluated:{
-        type:Types.ObjectId,
+        type:String,
         ref:"Educator",
         required:true
     },
@@ -49,7 +49,7 @@ const AutoEvaluationSchema = new Schema<IAutoEvaluation>({
         type:String,
     },
     labour:{
-        type:Types.ObjectId,
+        type:String,
         ref:"Labour",
         required:true
     },

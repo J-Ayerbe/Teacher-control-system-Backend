@@ -39,6 +39,20 @@ export class AuthController {
         .status(200)
         .json({
           message: "Usuario autenticado correctamente",
+            payload:{
+            firstName: educator.firstName,
+            lastName: educator.lastName,
+            email: educator.email,
+            role: educator.role,
+            autoevaluations:educator.autoEvaluations,
+            labours:educator.labours,
+            notifications:educator.notifications,
+            docentType:educator.docentType,
+            title:educator.title,
+            picture:educator.picture,
+            idType:educator.idType,
+            identification:educator.identification,
+          }
         });
     }
   );
@@ -70,6 +84,12 @@ export class AuthController {
         .status(201)
         .json({
           message: "Usuario registrado correctamente",
+          payload:{
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            role: user.role,
+          }
         });
     } catch (error: any) {
       await session.abortTransaction();

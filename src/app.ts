@@ -10,6 +10,7 @@ import { autoEvaluationRoute } from './routes/autoEvaluationRoute';
 import express from 'express';
 import dbConnection from './config/dbConfig';
 import { educatorRouter } from './routes/educatorRoute';
+import { notificationRouter } from './routes/notificationRouter';
 import cors from 'cors'
 import cookieParser  from "cookie-parser";
 import { authRouter } from './routes/authRouter';
@@ -28,6 +29,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use('/api/educators', educatorRouter);
 app.use('/api/autoEvaluations', autoEvaluationRoute)
+app.use('/api/notification', notificationRouter );
 app.use('/api/auth', authRouter);
 app.use(errorHandler);
 app.listen(3000, () => {

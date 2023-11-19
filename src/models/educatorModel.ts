@@ -67,13 +67,13 @@ const EducatorSchema = new Schema<IEducator>({
   },
   notifications: [
     {
-      type: Types.ObjectId,
+      type:String,
       ref: "Notification",
     },
   ],
     autoEvaluations: [
     {
-      type: Types.ObjectId,
+      type:String,
       ref: "AutoEvaluation",
     },
   ],

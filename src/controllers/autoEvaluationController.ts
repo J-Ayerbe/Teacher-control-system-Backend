@@ -1,6 +1,7 @@
 import { periodController } from "./periodController";
 import { labourController } from "./labourController";
 import { NotificationController } from "./notificationController";
+import { AutoEvaluation } from "../models/autoEvaluationModel";
 import { Request,Response } from 'express';
 
 
@@ -8,6 +9,17 @@ import { Request,Response } from 'express';
 //Contiene a periodController, laboralController, notificacionController
 
 class AutoEvaluationController{
+  // AutoEvaluationController
+  async createAutoEvaluation(req: Request, _res: Response) {
+    try {
+      const autoevaluacion =  new AutoEvaluation(req.body);
+      await autoevaluacion.save();
+      return autoevaluacion._id;
+    } catch (error) {
+      return null;
+    }
+  }
+
   // PeriodController
   async getPeriods(req: Request, res: Response) {
     return await periodController.getPeriods(req, res);
@@ -22,7 +34,6 @@ class AutoEvaluationController{
   }
 
   // LabourController
-
   async getLabours(req: Request, res: Response){
     return await labourController.getLabours(req, res);
   }
@@ -40,15 +51,11 @@ class AutoEvaluationController{
   }
 
   // NotificationController
-  async sendEmail(req: Request, res: Response){
-    return await NotificationController.sendEmail(req, res);
-  }
-  async getNotification(req: Request, res: Response){
-    return await NotificationController.getNotification(req, res);
-  }
-
   async createNotification(req: Request, res: Response){
     return await NotificationController.createNotification(req, res);
+  }
+  async sendEmail(req: Request, res: Response){
+    return await NotificationController.sendEmail(req, res);
   }
 }
 

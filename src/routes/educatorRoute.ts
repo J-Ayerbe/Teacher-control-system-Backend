@@ -5,9 +5,8 @@ import { Router } from 'express'
 
 export const educatorRouter = Router()
 
-//TODO: verificar token
-educatorRouter.post('/createEducator', EducatorController.createEducator)
-
-educatorRouter.get('/getEducator/:uid', EducatorController.getEducatorById)
-
+educatorRouter.get('/getEducator/:id', EducatorController.getEducatorById)
 educatorRouter.get('/getEducators', EducatorController.getEducators)
+educatorRouter.post('/addNotification', EducatorController.addNotification)
+educatorRouter.post('/addAutoEvaluation', EducatorController.addAutoEvaluation)
+educatorRouter.post('/getNotifications', EducatorController.getNotifications)

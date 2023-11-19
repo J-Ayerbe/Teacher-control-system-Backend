@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { Notification } from "../models/notificationModel";
 import { getEmail, getPort, getUser, getPass } from "../helpers/getEmailData";
-import { Notification } from "../models/notificationModel";
+
 
 const nodemailer = require("nodemailer");
 
@@ -20,7 +20,7 @@ export class NotificationController {
     res.send("getNotification");
   }
 
-  static async createNotification(req: any, _res: Response) {
+  static async createNotification(req: Request, _res: Response) {
     try {
         const notification = new Notification(req.body);
         await notification.save();
@@ -31,7 +31,7 @@ export class NotificationController {
     }       
   }
 
-  static async sendEmail(req: any, res: Response) {
+  static async sendEmail(req: Request, res: Response) {
     try {
         const data = req.body;
         const msj = "AutoEvaluation <"+getEmail+">";

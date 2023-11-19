@@ -5,7 +5,7 @@ import { nanoid } from 'nanoid';
 
 const LabourTypeSchema = new Schema<ILabourType>({
   _id: { type: String, default: () => nanoid() },
-  id: {
+  idLabourType: {
     type: Number,
     min: 1,
     max: 10,

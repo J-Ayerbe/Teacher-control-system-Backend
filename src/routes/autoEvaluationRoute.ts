@@ -1,17 +1,17 @@
+import { AutoEvaluationController } from './../controllers/autoEvaluationController';
 import { Router} from 'express'
-import { autoEvaluationController } from '../controllers/autoEvaluationController';
 import validateSchema from "../middlewares/validateSchema";
 import periodSchema from '../middlewares/schemas/periodShemas';
 
 
 export const autoEvaluationRoute = Router()
 //Periods
-autoEvaluationRoute.get('/periods', autoEvaluationController.getPeriods)
-autoEvaluationRoute.get('/period/:id', autoEvaluationController.getPeriodById)
-autoEvaluationRoute.post('/period',validateSchema(periodSchema), autoEvaluationController.createPeriod)
+autoEvaluationRoute.get('/periods', AutoEvaluationController.getPeriods)
+autoEvaluationRoute.get('/period/:id', AutoEvaluationController.getPeriodById)
+autoEvaluationRoute.post('/period',validateSchema(periodSchema), AutoEvaluationController.createPeriod)
 //Labours
-autoEvaluationRoute.get('/labours', autoEvaluationController.getLabours)
-autoEvaluationRoute.get('/labour/:id', autoEvaluationController.getLabourById)
-autoEvaluationRoute.post('/labour', autoEvaluationController.createLabour)
-autoEvaluationRoute.put('/labour/:id', autoEvaluationController.updateLabour)
-autoEvaluationRoute.delete('/labour/:id', autoEvaluationController.deleteLabour)
+autoEvaluationRoute.get('/labours', AutoEvaluationController.getLabours)
+autoEvaluationRoute.get('/labour/:id', AutoEvaluationController.getLabourById)
+autoEvaluationRoute.post('/labour', AutoEvaluationController.createLabour)
+autoEvaluationRoute.put('/labour/:id', AutoEvaluationController.updateLabour)
+autoEvaluationRoute.delete('/labour/:id', AutoEvaluationController.deleteLabour)

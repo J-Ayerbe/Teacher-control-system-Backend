@@ -1,6 +1,7 @@
 import { EducatorController } from './../controllers/educatorController';
 
 
+
 import { Router } from 'express'
 
 export const educatorRouter = Router()

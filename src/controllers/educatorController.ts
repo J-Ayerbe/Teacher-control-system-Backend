@@ -1,7 +1,8 @@
 import { IEducatorController } from "../types/IeducatorController";
 import { Request,Response } from 'express';
 import {Educator} from "../models/educatorModel";
-import { Notification } from "../models/notificationModel";
+import { NotificationController } from './notificationController';
+import { autoEvaluationController } from "./autoEvaluationController";
 
 class EducatorController implements IEducatorController {
     //TODO: add try-tach
@@ -36,15 +37,38 @@ class EducatorController implements IEducatorController {
             res.status(404).json({ message: "Educator not found" });
         }else{
             // Agregamos la notificación al educador
-            const notification = new Notification(data);
-            await notification.save();
-            educator.notifications.push(notification._id);
-
+            const notificationId = await NotificationController.createNotification(req, res);
+            if(!notificationId){
+                res.status(404).json({ message: "Notification not created" });
+            }
+            educator.notifications.push(notificationId);
             await educator.save();
 
             res.status(200).json({ message: "Notification added" });
         }
     }
+
+    async addAutoEvaluation(req: Request, res:Response){
+        const data = req.body;
+        // Buscamos al educador por su id
+        const educator = await Educator.findById(data.educatorId);
+        if (!educator) {
+            res.status(404).json({ message: "Educator not found" });
+        }else{
+            // Agregamos la autoevaluación al educador
+            const autoevaluacionId = await autoEvaluationController.createAutoEvaluation(req, res);
+            if(!autoevaluacionId){
+                res.status(404).json({ message: "AutoEvaluation not created" });
+            }
+            educator.autoEvaluations.push(autoevaluacionId);
+            await educator.save();
+
+            res.status(200).json({ message: "AutoEvaluation added" });
+        }
+    }
+
+
+
 }
 
 export const educatorController = new EducatorController();

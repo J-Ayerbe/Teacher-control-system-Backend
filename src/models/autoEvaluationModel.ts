@@ -1,4 +1,4 @@
-import { Schema, model,Types } from "mongoose";
+import { Schema, model } from "mongoose";
 import { AutoEvaluation as IAutoEvaluation } from "./interfaces/interfaces";
 import { v4 as uuidv4 } from 'uuid';
 
@@ -16,42 +16,121 @@ const AutoEvaluationSchema = new Schema<IAutoEvaluation>({
         max:100
     },
     period:{
-        type:Types.ObjectId,
-        ref:"Period",
-        required:true
+        idPeriod:{
+            type:String,
+            required:true
+        },
+        name:{
+            type:String,
+            required:true
+        },
+        year:{
+            type:String,
+            required:true
+        },
+        semester:{
+            type:Number,
+            required:true
+        },
+        startDate:{
+            type:Date,
+            required:true
+        },
+        endDate:{
+            type:Date,
+            required:true
+        }
     },
     date:{
         type:Date,
         required:true
     },
     evaluator:{
-        type:String,
-        ref:"Educator",
-        required:true
+        idEvaluator:{
+            type:String,
+            ref:"Educator",
+            required:true
+        },
+        firstName:{
+            type:String,
+            required:true
+        },
+        lastName:{
+            type:String,
+            required:true
+        },
+        email:{
+            type:String,
+            required:true
+        },
+        role:{
+            type:String,
+            required:true
+        },
     },
     evaluated:{
-        type:String,
-        ref:"Educator",
-        required:true
+        idEvaluated:{
+            type:String,
+            ref:"Educator",
+            required:true
+        },
+        firstName:{
+            type:String,
+            required:true
+        },
+        lastName:{
+            type:String,
+            required:true
+        },
+        email:{
+            type:String,
+            required:true
+        },
+        role:{
+            type:String,
+            required:true
+        },
     },
     results:{
         type:String,
-        required:true
     },
     suggestions:{
         type:String
     },
     act:{
-        type:Boolean,
-        enum:[0,1]
+        type:Boolean,   
     },
     observation:{
         type:String,
     },
     labour:{
-        type:String,
-        ref:"Labour",
-        required:true
+        idLabour:{
+            type:String,
+            ref:"Labour",
+            required:true
+        },
+        assignedHours:{
+            type:Number,
+            required:true
+        },
+        isActive:{
+            type:Boolean,
+            required:true
+        },
+        labourType:{
+            idlabourType:{
+                type:Number,
+                required:true
+            },
+            code:{
+                type:String,
+                required:true
+            },
+            description:{
+                type:String,
+                required:true
+            }
+        }       
     },
     evidencesLink:{
         type:String

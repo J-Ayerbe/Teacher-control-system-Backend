@@ -1,6 +1,6 @@
 import { Response} from "express";
 import { getEmail, getPort, getUser, getPass } from "../helpers/getEmailData";
-
+import { Notification } from "../models/notificationModel";
 
 
 const nodemailer = require("nodemailer");
@@ -16,6 +16,17 @@ const transporter = nodemailer.createTransport({
 });
 
 export class NotificationController {
+
+  static async createNotification(req: any, _res: Response) {
+    try {
+        const notification = new Notification(req.body);
+        await notification.save();
+        return notification._id;
+    }
+    catch (error) {
+        return null;        
+    }       
+  }
 
   static async sendEmail(req: any, res: Response) {
     try {

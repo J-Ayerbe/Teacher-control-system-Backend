@@ -9,3 +9,10 @@ educatorRouter.get('/getEducator/:id', educatorController.getEducatorById)
 educatorRouter.get('/getEducators', educatorController.getEducators)
 
 educatorRouter.post('/addNotification', educatorController.addNotification)
+educatorRouter.post('/addAutoEvaluation', educatorController.addAutoEvaluation)
+
+
+
+
+
+

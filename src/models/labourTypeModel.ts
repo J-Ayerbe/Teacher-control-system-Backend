@@ -1,9 +1,10 @@
 import {Schema,model} from "mongoose";
 import { LabourType as ILabourType } from "./interfaces/interfaces";
-import { v4 as uuidv4 } from 'uuid';
+import { nanoid } from 'nanoid';
+
 
 const LabourTypeSchema = new Schema<ILabourType>({
-  _id: { type: String, default: uuidv4, immutable: true },
+  _id: { type: String, default: () => nanoid() },
   idLabourType: {
     type: Number,
     min: 1,

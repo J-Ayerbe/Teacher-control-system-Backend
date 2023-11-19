@@ -5,7 +5,7 @@ export interface Period {
   semester:number,
   startDate:Date,
   endDate:Date,
-  autoEvaluations:AutoEvaluation[]
+  autoEvaluations:string[]
 }
 
 enum DocentType {
@@ -33,10 +33,10 @@ export interface Educator {
   lastName:string,
   joinDate:Date,
   picture:string,
-  notifications:Notification[],
-  labours:Labour[],
+  notifications:string[],
+  labours:string[],
   role:EducatorRole,
-  autoEvaluations:AutoEvaluation[]
+  autoEvaluations:string[]
 }
 
 export interface Notification{

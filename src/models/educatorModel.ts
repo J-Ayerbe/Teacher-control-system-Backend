@@ -1,9 +1,9 @@
 import { Educator as IEducator } from "./interfaces/interfaces";
 import { Schema, model, Types } from "mongoose";
-import { v4 as uuidv4 } from 'uuid';
+import { nanoid } from 'nanoid';
 
 const EducatorSchema = new Schema<IEducator>({
-  _id: { type: String, default: uuidv4, immutable: true },
+  _id: { type: String, default: () => nanoid()  },
   identification: {
     type: String,
     sparse: true,
@@ -67,13 +67,13 @@ const EducatorSchema = new Schema<IEducator>({
   },
   notifications: [
     {
-      type: Types.ObjectId,
+      type:String,
       ref: "Notification",
     },
   ],
     autoEvaluations: [
     {
-      type: Types.ObjectId,
+      type:String,
       ref: "AutoEvaluation",
     },
   ],

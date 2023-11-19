@@ -1,9 +1,10 @@
 import { Schema, model,Types } from "mongoose";
 import { Period as IPeriod } from "./interfaces/interfaces";
-import { v4 as uuidv4 } from 'uuid';
+import { nanoid } from 'nanoid';
+
 
 const PeriodSchema = new Schema<IPeriod>({
-  _id: { type: String, default: uuidv4, immutable: true },
+  _id: { type: String, default: () => nanoid()  },
   name: {
     type: String,
     required: true,

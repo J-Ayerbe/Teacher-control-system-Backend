@@ -6,7 +6,7 @@ export const generateToken = (uid: string, role: string): Promise<string> => {
   return new Promise((resolve, reject) => {
     const payload = { uid, role };
     const options = {
-      expiresIn: "2m",
+      expiresIn: "15s",
     };
     jwt.sign(payload, jwtSecret, options, (err, token) => {
       if (err) {

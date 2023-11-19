@@ -1,9 +1,10 @@
 import { Schema, model } from "mongoose";
 import { AutoEvaluation as IAutoEvaluation } from "./interfaces/interfaces";
-import { v4 as uuidv4 } from 'uuid';
+import { nanoid } from 'nanoid';
+
 
 const AutoEvaluationSchema = new Schema<IAutoEvaluation>({
-     _id: { type: String, default: uuidv4, immutable: true },
+      _id: { type: String, default: () => nanoid()  },
     state:{
         type:String,
         required:true,
@@ -98,7 +99,7 @@ const AutoEvaluationSchema = new Schema<IAutoEvaluation>({
         type:String
     },
     act:{
-        type:Boolean,   
+        type:Boolean,
     },
     observation:{
         type:String,
@@ -130,7 +131,7 @@ const AutoEvaluationSchema = new Schema<IAutoEvaluation>({
                 type:String,
                 required:true
             }
-        }       
+        }
     },
     evidencesLink:{
         type:String

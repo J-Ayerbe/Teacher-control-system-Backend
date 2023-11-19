@@ -1,7 +1,6 @@
 import { IEducatorController } from "../types/IeducatorController";
 import { Request,Response } from 'express';
 import {Educator} from "../models/educatorModel";
-import { NotificationController } from './notificationController';
 import { autoEvaluationController } from "./autoEvaluationController";
 
 class EducatorController implements IEducatorController {
@@ -37,7 +36,7 @@ class EducatorController implements IEducatorController {
             res.status(404).json({ message: "Educator not found" });
         }else{
             // Agregamos la notificación al educador
-            const notificationId = await NotificationController.createNotification(req, res);
+            const notificationId = await autoEvaluationController.createNotification(req, res);
             if(!notificationId){
                 res.status(404).json({ message: "Notification not created" });
             }
@@ -65,6 +64,35 @@ class EducatorController implements IEducatorController {
 
             res.status(200).json({ message: "AutoEvaluation added" });
         }
+    }
+
+    async addLabor(req: Request, res:Response){
+        const data = req.body;
+        // Buscamos al educador por su id
+        const educator = await Educator.findById(data.educatorId);
+        if (!educator) {
+            res.status(404).json({ message: "Educator not found" });
+        }
+        else{
+            // Agregamos la labor al educador
+            educator.labours.push(data.laborId);
+            await educator.save();
+
+            res.status(200).json({ message: "Labor added" });
+        }
+    }
+
+    async getNotifications(req: Request, res:Response){
+        const educator = await Educator.findById(req.body.id).populate({
+            path: 'notifications',
+            match: { read: false }
+          }).exec();
+          
+          if (!educator) {
+            res.status(404).json({ message: "Educator not found" });
+          } else {
+            res.status(200).json({ data: educator.notifications });
+          }
     }
 
 

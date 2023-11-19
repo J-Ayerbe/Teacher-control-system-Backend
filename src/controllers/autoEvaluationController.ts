@@ -34,7 +34,6 @@ class AutoEvaluationController{
   }
 
   // LabourController
-
   async getLabours(req: Request, res: Response){
     return await labourController.getLabours(req, res);
   }
@@ -52,6 +51,9 @@ class AutoEvaluationController{
   }
 
   // NotificationController
+  async createNotification(req: Request, res: Response){
+    return await NotificationController.createNotification(req, res);
+  }
   async sendEmail(req: Request, res: Response){
     return await NotificationController.sendEmail(req, res);
   }

@@ -3,7 +3,7 @@ import { AuthController } from '../controllers/authController'
 import validateSchema from "../middlewares/validateSchema";
 import userSchema from "../middlewares/schemas/educatorSchema";
 import loginSchema from "../middlewares/schemas/loginSchema";
-import { validarJWT } from '../middlewares/validateJWT';
+//import { validarJWT } from '../middlewares/validateJWT';
 
 export const authRouter = Router()
 

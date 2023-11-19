@@ -22,24 +22,21 @@ export const validarJWT = async (req, res: Response, next: NextFunction) => {
       currentToken = jwt.decode(token);
       res.cookie("jwtToken", token, { httpOnly: true });
     } catch (msgError) {
-      console.log(msgError);
       return next(new AppError(msgError, 401));
     }
   } else {
     try {
       currentToken = jwt.verify(tokenCookie, jwtSecret!);
-    } catch (error) {
+    } catch (error:any) {
       if (error.name === "TokenExpiredError") {
         try {
           const  token = await renewToken(refreshTokenCookie);
           currentToken = jwt.decode(token);
           res.cookie("jwtToken", token, { httpOnly: true });
         } catch (error) {
-          console.log(error);
           return next(new AppError("Could not refresh token", 401));
         }
       } else {
-        console.log(error.name);
         console.log("El token es invalido");
         return next(new AppError("Invalid token", 401));
       }

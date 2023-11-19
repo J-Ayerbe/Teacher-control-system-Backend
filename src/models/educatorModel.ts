@@ -1,5 +1,5 @@
 import { Educator as IEducator } from "./interfaces/interfaces";
-import { Schema, model, Types } from "mongoose";
+import { Schema, model } from "mongoose";
 import { nanoid } from 'nanoid';
 
 const EducatorSchema = new Schema<IEducator>({
@@ -49,8 +49,8 @@ const EducatorSchema = new Schema<IEducator>({
     required: true,
   },
   labours:[{
-    type: Types.ObjectId,
-      ref: "Labour",
+    type: String,
+    ref: "Labour",
   }],
   joinDate: {
     type: Date,
@@ -66,16 +66,16 @@ const EducatorSchema = new Schema<IEducator>({
     enum:["Coordinador","Decano","Docente"]
   },
   notifications: [
-    {
+  {
       type:String,
       ref: "Notification",
-    },
+  },
   ],
-    autoEvaluations: [
-    {
-      type:String,
-      ref: "AutoEvaluation",
-    },
+  autoEvaluations: [
+  {
+    type:String,
+    ref: "AutoEvaluation",
+  },
   ],
 });
 

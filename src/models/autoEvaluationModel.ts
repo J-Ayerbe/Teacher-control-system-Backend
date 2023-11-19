@@ -49,7 +49,6 @@ const AutoEvaluationSchema = new Schema<IAutoEvaluation>({
     evaluator:{
         idEvaluator:{
             type:String,
-            ref:"Educator",
             required:true
         },
         firstName:{
@@ -72,7 +71,6 @@ const AutoEvaluationSchema = new Schema<IAutoEvaluation>({
     evaluated:{
         idEvaluated:{
             type:String,
-            ref:"Educator",
             required:true
         },
         firstName:{

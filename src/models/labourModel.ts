@@ -4,7 +4,11 @@ import { v4 as uuidv4 } from 'uuid';
 
 const LabourSchema = new Schema<ILabour>({
   _id: { type: String, default: uuidv4, immutable: true },
- isActive: {
+  nameWork:{
+   type: String,
+    required: true, 
+  },
+  isActive: {
     type: Boolean,
     required: true,
   },

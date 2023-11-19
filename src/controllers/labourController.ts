@@ -1,6 +1,7 @@
 import { ILabourController } from "../types/IlabourController";
 import { Request,Response } from 'express';
 import { Labour } from "../models/labourModel";
+import { LabourType } from "../models/labourTypeModel";
 
 
 class LabourController implements ILabourController  {
@@ -52,6 +53,26 @@ class LabourController implements ILabourController  {
           res.status(404).json({ message: "Labour not found" });
       }
 
+    }catch(error){
+      res.status(500).json({ error:error });
+    }
+
+  }
+  async getTypeLabours(_req: Request, res:Response){
+    try{
+      const response=await LabourType.find();
+      
+      res.status(200).json(response); 
+    }catch(error){
+      res.status(500).json({ error:error });
+    }
+    
+  }
+  async getTypeLabourById(req: Request, res: Response){
+    try{
+      const response=await LabourType.findById(req.params.id);
+    
+      res.status(200).json(response);
     }catch(error){
       res.status(500).json({ error:error });
     }

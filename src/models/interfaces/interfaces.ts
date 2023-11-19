@@ -70,13 +70,14 @@ export interface Labour{
   labourType:string,
   assignedHours:number
   isActive:boolean,
+  nameWork:string,
   code:string,
   idlabourType:number
 }
 
 export interface LabourType{
   readonly _id?: string;
-  id:number,
+  idLabourType:number,
   code:string,
   description:string,
 }

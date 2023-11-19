@@ -1,8 +1,10 @@
-import { tryCatchFn } from "../helpers/customTryCatch";
-import { AppError } from "../helpers/errorHandler";
-import { Educator } from "../models/educatorModel";
-import { autoEvaluationController } from "./autoEvaluationController";
+import { AutoEvaluationController } from './autoEvaluationController';
+import { AppError } from "./../helpers/errorHandler";
+import { tryCatchFn } from "./../helpers/customTryCatch";
 import { NextFunction, Request, Response } from "express";
+import { Educator } from "../models/educatorModel";
+import { AutoEvaluation } from "../models/autoEvaluationModel";
+import mongoose from "mongoose";
 
 export class EducatorController {
   static getEducators = tryCatchFn(async (_req: Request, res: Response) => {
@@ -29,38 +31,56 @@ export class EducatorController {
     return res.status(201).json({ message: "Educator created" });
   });
 
-  static updateEducator = tryCatchFn(async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const update = req.body;
-    console.log(id,update)
-
-    const updatedEducator = await Educator.findByIdAndUpdate(
-      id,
-      { $set: update },
-      { new: true }
-    );
-
-    res
-      .status(200)
-      .json({ message: "Educador actualizado", educator: updatedEducator });
-  });
-
-  static deleteEducator = tryCatchFn(
-    async (req: Request, res: Response, next: NextFunction) => {
+ static async updateEducator(req: Request, res: Response, next: NextFunction) {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try {
+      const data = req.body;
       const { id } = req.params;
-
-      const deletedEducator = await Educator.findByIdAndDelete(id);
-
-      if (!deletedEducator) {
-        return next(new AppError("Educador no encontrado", 404));
+      const educator = await Educator.findById(id).session(session);
+      if (!educator) {
+        return next(new AppError("Educator not found", 404));
       }
-      res
-        .status(200)
-        .json({ message: "Educador eliminado", educator: deletedEducator });
-    }
-  );
+      const autoEvaluations = educator.autoEvaluations;
+      for (const idAutoEvaluation of autoEvaluations) {
+        const updatedAutoEvaluation = await AutoEvaluation.findByIdAndUpdate(
+          idAutoEvaluation,
+          data,
+          { new: true }
+        ).session(session);
+        if (!updatedAutoEvaluation) {
+          await session.abortTransaction();
+          session.endSession();
+          return res.status(404).json({ message: "AutoEvaluation not found" });
+        }
+      }
+       const updatedEducator = await Educator.findByIdAndUpdate(
+      id,
+      { $set: data },
+      { new: true }
+    ).session(session);
+      if (!updatedEducator) {
+        await session.abortTransaction();
+        session.endSession();
+        return res.status(404).json({ message: "Educator not found" });
+      }
 
-  static async addNotification(req: Request, res: Response) {
+      await session.commitTransaction();
+      session.endSession();
+      res.status(200).json({ message: "Educator updated" });
+    } catch (error) {
+      await session.abortTransaction();
+      session.endSession();
+      res.status(500).json({ message: "An error occurred" });
+    }
+    return 0;
+  }
+
+ static async deleteEducator(_req: Request, res: Response) {
+    res.status(200).json({ message: "deleteEducator" });
+  }
+
+ static async addNotification(req: Request, res: Response) {
     const data = req.body;
     // Buscamos al educador por su id
     const educator = await Educator.findById(data.educatorId);
@@ -68,7 +88,7 @@ export class EducatorController {
       res.status(404).json({ message: "Educator not found" });
     } else {
       // Agregamos la notificación al educador
-      const notificationId = await autoEvaluationController.createNotification(
+      const notificationId = await AutoEvaluationController.createNotification(
         req,
         res
       );
@@ -91,7 +111,7 @@ export class EducatorController {
     } else {
       // Agregamos la autoevaluación al educador
       const autoevaluacionId =
-        await autoEvaluationController.createAutoEvaluation(req, res);
+        await AutoEvaluationController.createAutoEvaluation(req, res);
       if (!autoevaluacionId) {
         res.status(404).json({ message: "AutoEvaluation not created" });
       }
@@ -117,7 +137,7 @@ export class EducatorController {
     }
   }
 
-  static async getNotifications(req: Request, res: Response) {
+ static async getNotifications(req: Request, res: Response) {
     const educator = await Educator.findById(req.body.id)
       .populate({
         path: "notifications",

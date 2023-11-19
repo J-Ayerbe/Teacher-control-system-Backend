@@ -1,21 +1,20 @@
 //Pide los datos a una api externa
-import { IPeriodController } from "../types/IperiodController";
 import { Response } from 'express';
 import { apiPeriodUrl } from "../helpers/apiPeriodUrl";
 
-    
-class PeriodController implements IPeriodController{
-    async getPeriods(_req: any, res: Response) {
+
+export class PeriodController{
+   static async getPeriods(_req: any, res: Response) {
         try {
             const response = await fetch(`${apiPeriodUrl}/periods`);
             const data = await response.json();
-            res.status(200).json(data);      
+            res.status(200).json(data);
         } catch (error) {
-            res.status(500).json({ error: error });         
+            res.status(500).json({ error: error });
         }
     }
 
-    async getPeriodById(req: any, res: any) {
+   static async getPeriodById(req: any, res: any) {
         try {
             const response = await fetch(`${apiPeriodUrl}/period/${req.params.id}`);
             const data = await response.json();
@@ -25,7 +24,7 @@ class PeriodController implements IPeriodController{
         }
     }
 
-    async createPeriod(req: any, res: any) {
+   static async createPeriod(req: any, res: any) {
         try {
             const data = req.body;
             const apiUrl = `${apiPeriodUrl}/period`;
@@ -36,7 +35,7 @@ class PeriodController implements IPeriodController{
                 headers: { 'Content-Type': 'application/json' }
             });
             const responseData = await response.json();
-            res.status(200).json(responseData);       
+            res.status(200).json(responseData);
         } catch (error) {
             res.status(500).json({ error: error });
         }

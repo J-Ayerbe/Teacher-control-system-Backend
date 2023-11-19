@@ -5,7 +5,10 @@ import { nanoid } from 'nanoid';
 
 const LabourSchema = new Schema<ILabour>({
   _id: { type: String, default: () => nanoid()  },
-
+  nameWork:{
+   type: String,
+    required: true, 
+  },
  isActive: {
     type: Boolean,
     required: true,

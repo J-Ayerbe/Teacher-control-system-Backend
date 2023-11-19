@@ -1,35 +1,35 @@
-import { ILabourController } from "../types/IlabourController";
 import { Request,Response } from 'express';
 import { Labour } from "../models/labourModel";
+import { LabourType } from "../models/labourTypeModel";
 
 
-class LabourController implements ILabourController  {
-  async getLabours(_req: Request, res:Response){
+export class LabourController   {
+  static async getLabours(_req: Request, res:Response){
     try{
       const response=await Labour.find();
-      
-      res.status(200).json(response); 
-    }catch(error){
-      res.status(500).json({ error:error });
-    }
-    
-  }
-  async getLabourById(req: Request, res: Response){
-    try{
-      const response=await Labour.findById(req.params.id);
-    
+
       res.status(200).json(response);
     }catch(error){
       res.status(500).json({ error:error });
     }
 
   }
-  async createLabour(req: Request, res: Response){
+ static async getLabourById(req: Request, res: Response){
+    try{
+      const response=await Labour.findById(req.params.id);
+
+      res.status(200).json(response);
+    }catch(error){
+      res.status(500).json({ error:error });
+    }
+
+  }
+  static async createLabour(req: Request, res: Response){
     const labour=new Labour(req.body)
     await labour.save();
     res.status(201).json({ message: "createLabour"});
   }
-  async updateLabour(req: Request, res: Response){
+ static async updateLabour(req: Request, res: Response){
     try{
       const updatedLabour = await Labour.findByIdAndUpdate(req.params.id, req.body, { new: true });
       if (updatedLabour) {
@@ -43,7 +43,7 @@ class LabourController implements ILabourController  {
 
   }
 
-  async deleteLabour(req: Request, res: Response){
+  static async deleteLabour(req: Request, res: Response){
     try{
       const deletedLabour=await Labour.findByIdAndDelete(req.params.id);
       if(deletedLabour){
@@ -57,7 +57,25 @@ class LabourController implements ILabourController  {
     }
 
   }
+ static async getTypeLabours(_req: Request, res:Response){
+    try{
+      const response=await LabourType.find();
+
+      res.status(200).json(response);
+    }catch(error){
+      res.status(500).json({ error:error });
+    }
+
+  }
+ static async getTypeLabourById(req: Request, res: Response){
+    try{
+      const response=await LabourType.findById(req.params.id);
+
+      res.status(200).json(response);
+    }catch(error){
+      res.status(500).json({ error:error });
+    }
+
+  }
 
 }
-
-export const labourController = new LabourController();

@@ -3,6 +3,7 @@ import { Request,Response } from 'express';
 import {Educator} from "../models/educatorModel";
 import { AutoEvaluation } from "../models/autoEvaluationModel";
 import { autoEvaluationController } from "./autoEvaluationController";
+import mongoose from "mongoose";
 
 
 class EducatorController implements IEducatorController {
@@ -26,23 +27,41 @@ class EducatorController implements IEducatorController {
     }
 
     async updateEducator(req: Request, res:Response){
-        // Buscamos al educador por su id
-        const data = req.body;
-        const educator = await Educator.findById(data.educatorId);
-        const idAutoEvaluation = educator.autoEvaluations[0];
-        const autoEvaluation = await AutoEvaluation.findById(idAutoEvaluation);
-        if (!educator || !autoEvaluation) {
-            res.status(404).json({ message: "Educator not found" });
-        } else {
-            const updatedEducator = await Educator.findByIdAndUpdate(data.educatorId, data, { new: true });
-            const updatedAutoEvaluation = await AutoEvaluation.findByIdAndUpdate(idAutoEvaluation, data, { new: true });
-            if (!updatedEducator || !updatedAutoEvaluation) {
+        const session = await mongoose.startSession();
+        session.startTransaction();
+        try {
+            const data = req.body;
+            const educator = await Educator.findById(data.educatorId).session(session);
+            if (!educator) {
                 res.status(404).json({ message: "Educator not found" });
+            } else {
+                const autoEvaluations = educator.autoEvaluations;
+                for (const idAutoEvaluation of autoEvaluations) {
+                    const updatedAutoEvaluation = await AutoEvaluation.findByIdAndUpdate(idAutoEvaluation, data, { new: true }).session(session);
+                    if (!updatedAutoEvaluation) {
+                        await session.abortTransaction();
+                        session.endSession();
+                        return res.status(404).json({ message: "AutoEvaluation not found" });
+                    }
+                }
+                const updatedEducator = await Educator.findByIdAndUpdate(data.educatorId, data, { new: true }).session(session);
+                if (!updatedEducator) {
+                    await session.abortTransaction();
+                    session.endSession();
+                    return res.status(404).json({ message: "Educator not found" });
+                }
             }
-
-            res.status(200).json({ message: "Educator updated",idAuto: idAutoEvaluation });    
-        }   
-    }
+            await session.commitTransaction();
+            session.endSession();
+            res.status(200).json({ message: "Educator updated" });
+        } catch (error) {
+            await session.abortTransaction();
+            session.endSession();
+            res.status(500).json({ message: "An error occurred" });
+        }    
+        return 0;   
+    }   
+    
 
     async deleteEducator(_req: Request, res:Response){
         res.status(200).json({ message: "deleteEducator" });

@@ -5,3 +5,5 @@ const labourTypechema=z.object({
     code:z.string(),
     description:z.string(),
 });
+
+export default labourTypechema;

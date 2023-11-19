@@ -76,9 +76,6 @@ export class EducatorController {
     return 0;
   }
 
- static async deleteEducator(_req: Request, res: Response) {
-    res.status(200).json({ message: "deleteEducator" });
-  }
 
  static async addNotification(req: Request, res: Response) {
     const data = req.body;
@@ -119,23 +116,25 @@ export class EducatorController {
       await educator.save();
 
       res.status(200).json({ message: "AutoEvaluation added" });
+
     }
   }
 
-  static async addLabor(req: Request, res: Response) {
-    const data = req.body;
-    // Buscamos al educador por su id
-    const educator = await Educator.findById(data.educatorId);
-    if (!educator) {
-      res.status(404).json({ message: "Educator not found" });
-    } else {
-      // Agregamos la labor al educador
-      educator.labours.push(data.laborId);
-      await educator.save();
 
-      res.status(200).json({ message: "Labor added" });
-    }
+  static async toggleEducatorStatus(req: Request, res:Response){
+        try {
+            const educator = await Educator.findByIdAndUpdate(req.params.id, req.body, { new: true });
+            if(!educator){
+                res.status(404).json({ message: "Educators not found" });
+            }else{
+                res.status(200).json({ message: "Educator updated" });
+            }
+            
+        } catch (error) {
+            res.status(500).json({ message: error });           
+        }
   }
+  
 
  static async getNotifications(req: Request, res: Response) {
     const educator = await Educator.findById(req.body.id)
@@ -151,4 +150,20 @@ export class EducatorController {
       res.status(200).json({ data: educator.notifications });
     }
   }
+
+  static  async addLabor(req: Request, res:Response){
+        const data = req.body;
+        const educator = await Educator.findById(data.educatorId);
+        if (!educator) {
+            res.status(404).json({ message: "Educator not found" });
+        }
+        else{
+            // Agregamos la labor al educador
+            educator.labours.push(data.labours);
+            await educator.save();
+
+            res.status(200).json({ message: "Labor added" });
+        }
+  }
+
 }

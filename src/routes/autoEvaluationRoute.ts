@@ -4,6 +4,7 @@ import validateSchema from "../middlewares/validateSchema";
 import periodSchema from '../middlewares/schemas/periodShemas';
 
 
+
 export const autoEvaluationRoute = Router()
 //Periods
 autoEvaluationRoute.get('/periods', AutoEvaluationController.getPeriods)
@@ -15,3 +16,6 @@ autoEvaluationRoute.get('/labour/:id', AutoEvaluationController.getLabourById)
 autoEvaluationRoute.post('/labour', AutoEvaluationController.createLabour)
 autoEvaluationRoute.put('/labour/:id', AutoEvaluationController.updateLabour)
 autoEvaluationRoute.delete('/labour/:id', AutoEvaluationController.deleteLabour)
+//AutoEvaluations
+autoEvaluationRoute.put('/toggleAutoEvaluationStatus/:id', AutoEvaluationController.toggleAutoEvaluationStatus)
+autoEvaluationRoute.put('/updateAutoEvaluation/:id', AutoEvaluationController.updateAutoEvaluation)

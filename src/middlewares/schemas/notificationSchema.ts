@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const notificationSchema = z.object({
+export const notificationSchema = z.object({
     educatorId: z.string().min(3).max(100),
     title: z.string().min(3).max(100),
     content: z.string().min(3).max(500),
@@ -8,4 +8,7 @@ const notificationSchema = z.object({
     read: z.boolean(),
 });
 
-export default notificationSchema;
+export const sendEmailSchema = z.object({
+    email: z.string().email(),
+    content: z.string().min(3).max(500),
+});

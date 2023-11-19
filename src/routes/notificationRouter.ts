@@ -1,5 +1,5 @@
 import { Router} from 'express'
-import sendEmailSchema from '../middlewares/schemas/sendEmailSchema';
+import { sendEmailSchema } from '../middlewares/schemas/notificationSchema';
 import validateSchema from "../middlewares/validateSchema";
 import { NotificationController } from '../controllers/notificationController';
 

@@ -10,3 +10,5 @@ const labourSchema=z.object({
      }),
     assignedHours:z.number().int().gte(1).lte(100),
 });
+
+export default labourSchema;

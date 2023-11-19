@@ -12,8 +12,8 @@ export class EducatorController {
 
   static getEducatorById = tryCatchFn(
     async (req: Request, res: Response, next: NextFunction) => {
-      const { uid } = req.params;
-      const educator = await Educator.findById(uid);
+      const { id } = req.params;
+      const educator = await Educator.findById(id);
 
       if (!educator) {
         return next(new AppError("Educator not found", 404));
@@ -32,6 +32,7 @@ export class EducatorController {
   static updateEducator = tryCatchFn(async (req: Request, res: Response) => {
     const { id } = req.params;
     const update = req.body;
+    console.log(id,update)
 
     const updatedEducator = await Educator.findByIdAndUpdate(
       id,

@@ -75,4 +75,5 @@ export interface LabourType{
   idLabourType:number,
   code:string,
   description:string,
+  toObject(): any;
 }

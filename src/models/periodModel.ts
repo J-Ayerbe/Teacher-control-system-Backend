@@ -13,10 +13,6 @@ const PeriodSchema = new Schema<IPeriod>({
     type:String,
     required: true,
   },
-  autoEvaluations: [{
-    type: Types.ObjectId,
-    ref: "AutoEvaluation",
-  }],
   semester: {
     type: Number,
     required: true,

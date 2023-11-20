@@ -18,6 +18,7 @@ export const userSchema = z.object({
 
 export const updateEducatorSchema = z.object({
   email: z.string().email("Not a valid email").optional(),
+  isActive: z.boolean(),
   docentType:z.enum(["Tiempo Completo", "Planta", "Cátedra"]).optional(),
   idType: z.string().min(2).max(10).optional(),
   title: z.string().optional(),
@@ -26,19 +27,16 @@ export const updateEducatorSchema = z.object({
   role: z.enum(["Coordinador", "Decano", "Docente"]).optional(),
 });
 
-export const toggleEducatorSchema = z.object({
-    isActive: z.boolean()
-});
 
 export const addAutoEvalSchema = z.object({
   educatorId: z.string().min(5).max(30),
-  state: z.enum(["Aprobado", "Rechazado", "Pendiente"]),
+  isActive: z.boolean(),
   puntuation: z.number().int().gte(0).lte(100),
   period: z.object({
-    idPeriod: z.string(),
+    idPeriod: z.string().min(5).max(30),
     name: z.string().min(5).max(30),
     year: z.string().min(4).max(4),
-    semester:   z.enum(["1", "2"]),
+    semester:   z.number().int().gte(1).lte(2),
     startDate:  z.string(),
     endDate:  z.string()
   }),

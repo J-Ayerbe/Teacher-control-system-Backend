@@ -3,8 +3,7 @@ import { AppError } from "./../helpers/errorHandler";
 import { tryCatchFn } from "./../helpers/customTryCatch";
 import { NextFunction, Request, Response } from "express";
 import { Educator } from "../models/educatorModel";
-import { AutoEvaluation } from "../models/autoEvaluationModel";
-import mongoose from "mongoose";
+
 
 export class EducatorController {
   static getEducators = tryCatchFn(async (_req: Request, res: Response) => {
@@ -31,49 +30,22 @@ export class EducatorController {
     return res.status(201).json({ message: "Educator created" });
   });
 
- static async updateEducator(req: Request, res: Response, next: NextFunction) {
-    const session = await mongoose.startSession();
-    session.startTransaction();
+ static async updateEducator(req: Request, res: Response) {
     try {
-      const data = req.body;
-      const { id } = req.params;
-      const educator = await Educator.findById(id).session(session);
-      if (!educator) {
-        return next(new AppError("Educator not found", 404));
+      const updatedEducator = await Educator.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        { new: true }
+      );
+      if (updatedEducator) {
+        res.status(200).json({ message: "Educator updated" });
+      } else {
+        res.status(404).json({ message: "Educator not found" });
       }
-      const autoEvaluations = educator.autoEvaluations;
-      for (const idAutoEvaluation of autoEvaluations) {
-        const updatedAutoEvaluation = await AutoEvaluation.findByIdAndUpdate(
-          idAutoEvaluation,
-          data,
-          { new: true }
-        ).session(session);
-        if (!updatedAutoEvaluation) {
-          await session.abortTransaction();
-          session.endSession();
-          return res.status(404).json({ message: "AutoEvaluation not found" });
-        }
-      }
-       const updatedEducator = await Educator.findByIdAndUpdate(
-      id,
-      { $set: data },
-      { new: true }
-    ).session(session);
-      if (!updatedEducator) {
-        await session.abortTransaction();
-        session.endSession();
-        return res.status(404).json({ message: "Educator not found" });
-      }
-
-      await session.commitTransaction();
-      session.endSession();
-      res.status(200).json({ message: "Educator updated" });
-    } catch (error) {
-      await session.abortTransaction();
-      session.endSession();
-      res.status(500).json({ message: "An error occurred" });
     }
-    return 0;
+    catch (error) {
+      res.status(500).json({ message: error });
+    }  
   }
 
 
@@ -107,11 +79,7 @@ export class EducatorController {
       res.status(404).json({ message: "Educator not found" });
     } else {
       // Agregamos la autoevaluación al educador
-      const autoevaluacionId =
-        await AutoEvaluationController.createAutoEvaluation(req, res);
-      if (!autoevaluacionId) {
-        res.status(404).json({ message: "AutoEvaluation not created" });
-      }
+      const autoevaluacionId = await AutoEvaluationController.createAutoEvaluation(req, res);
       educator.autoEvaluations.push(autoevaluacionId);
       await educator.save();
 
@@ -120,21 +88,6 @@ export class EducatorController {
     }
   }
 
-
-  static async toggleEducatorStatus(req: Request, res:Response){
-        try {
-            const educator = await Educator.findByIdAndUpdate(req.params.id, req.body, { new: true });
-            if(!educator){
-                res.status(404).json({ message: "Educators not found" });
-            }else{
-                res.status(200).json({ message: "Educator updated" });
-            }
-            
-        } catch (error) {
-            res.status(500).json({ message: error });           
-        }
-  }
-  
 
  static async getNotifications(req: Request, res: Response) {
     const educator = await Educator.findById(req.body.id)

@@ -33,18 +33,6 @@ export class AutoEvaluationController{
     }
   }
 
-  static async toggleAutoEvaluationStatus(req: Request, res: Response) {
-    try {
-      const updateAutoEvaluation = await AutoEvaluation.findByIdAndUpdate(req.params.id, req.body, { new: true });
-      if (updateAutoEvaluation) {
-        res.status(200).json({ message: "AutoEvaluation status updated" });
-      } else {
-        res.status(404).json({ message: "AutoEvaluation not found" });
-      }
-    } catch (error) {
-      res.status(500).json({ error: error });
-    }
-  }
 
   // PeriodController
   static async getPeriods(req: Request, res: Response) {

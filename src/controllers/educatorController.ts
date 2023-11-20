@@ -121,4 +121,21 @@ export class EducatorController {
         }
   }
 
+  static async getAutoEvalByPeriod(req: Request, res: Response) {
+    const data = req.body;
+    const educator = await Educator.findById(data.educatorId)
+      .populate({
+        path: "autoEvaluations",
+        match: { period: data.period },
+      })
+      .exec();
+
+    if (!educator) {
+      res.status(404).json({ message: "Educator not found" });
+    } else {
+      res.status(200).json({ data: educator.autoEvaluations });
+    }
+
+  }
+
 }

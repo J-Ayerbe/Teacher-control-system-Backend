@@ -16,7 +16,7 @@ export class LabourController   {
   }
  static async getLabourById(req: Request, res: Response){
     try{
-      const response=await Labour.findById(req.params.id);
+      const response=await Labour.findById(req.params.id).populate('labourType').exec();
 
       res.status(200).json(response);
     }catch(error){

@@ -8,6 +8,7 @@ export const educatorRouter = Router()
 
 educatorRouter.get('/getEducators', EducatorController.getEducators)
 educatorRouter.get('/getEducator/:id', EducatorController.getEducatorById)
+educatorRouter.get('/getAutoEvalByPeriod', EducatorController.getAutoEvalByPeriod)
 educatorRouter.post('/addNotification',validateSchema(addNotificationSchema),EducatorController.addNotification)
 educatorRouter.post('/addAutoEvaluation',validateSchema(addAutoEvalSchema), EducatorController.addAutoEvaluation)
 educatorRouter.post('/addLabor',validateSchema(addLabourSchema),EducatorController.addLabor)

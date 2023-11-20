@@ -14,7 +14,7 @@ const LabourSchema = new Schema<ILabour>({
     required: true,
   },
   labourType: {
-      type: Number,
+      type: String,
       ref: "LabourType",
       required: true,
   },

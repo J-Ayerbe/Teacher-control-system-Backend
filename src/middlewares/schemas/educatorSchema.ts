@@ -30,7 +30,7 @@ export const updateEducatorSchema = z.object({
 
 export const addAutoEvalSchema = z.object({
   educatorId: z.string().min(5).max(30),
-  isActive: z.boolean(),
+  state: z.enum(["En ejecución","Terminado","Suspendido"]),
   puntuation: z.number().int().gte(0).lte(100),
   period: z.object({
     idPeriod: z.string().min(5).max(30),

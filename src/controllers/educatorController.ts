@@ -80,11 +80,13 @@ export class EducatorController {
     } else {
       // Agregamos la autoevaluación al educador
       const autoevaluacionId = await AutoEvaluationController.createAutoEvaluation(req, res);
-      educator.autoEvaluations.push(autoevaluacionId);
-      await educator.save();
-
-      res.status(200).json({ message: "AutoEvaluation added" });
-
+      if (!autoevaluacionId) {
+        res.status(404).json({ message: "AutoEvaluation not created" });
+      }else{
+        educator.autoEvaluations.push(autoevaluacionId);
+        await educator.save();
+        res.status(200).json({ message: "AutoEvaluation added" });
+      }
     }
   }
 

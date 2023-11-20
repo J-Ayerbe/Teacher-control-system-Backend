@@ -6,7 +6,8 @@ import { LabourType } from "../models/labourTypeModel";
 export class LabourController   {
   static async getLabours(_req: Request, res:Response){
     try{
-      const response=await Labour.find();
+      const response=await Labour.find()
+     
 
       res.status(200).json(response);
     }catch(error){
@@ -16,7 +17,8 @@ export class LabourController   {
   }
  static async getLabourById(req: Request, res: Response){
     try{
-      const response=await Labour.findById(req.params.id);
+      const response=await Labour.findById(req.params.id)
+      .populate('LabourType');
 
       res.status(200).json(response);
     }catch(error){

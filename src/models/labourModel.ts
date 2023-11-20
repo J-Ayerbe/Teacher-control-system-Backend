@@ -14,18 +14,9 @@ const LabourSchema = new Schema<ILabour>({
     required: true,
   },
   labourType: {
-    idlabourType: {
       type: Number,
+      ref: "LabourType",
       required: true,
-    },
-    code: {
-      type: String,
-      required: true,
-    },
-    description: {
-      type: String,
-      required: true,
-    },
   },
   assignedHours: {
     type: Number,

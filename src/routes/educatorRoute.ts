@@ -1,6 +1,6 @@
 import { EducatorController } from './../controllers/educatorController';
 import validateSchema from "../middlewares/validateSchema";
-import {updateEducatorSchema, toggleEducatorSchema, addAutoEvalSchema, addNotificationSchema, addLabourSchema} from "../middlewares/schemas/educatorSchema";
+import {updateEducatorSchema, addAutoEvalSchema, addNotificationSchema, addLabourSchema} from "../middlewares/schemas/educatorSchema";
 
 import { Router } from 'express'
 
@@ -13,8 +13,6 @@ educatorRouter.post('/addAutoEvaluation',validateSchema(addAutoEvalSchema), Educ
 educatorRouter.post('/addLabor',validateSchema(addLabourSchema),EducatorController.addLabor)
 educatorRouter.post('/getNotifications', EducatorController.getNotifications)
 educatorRouter.put('/updateEducator',validateSchema(updateEducatorSchema), EducatorController.updateEducator)
-educatorRouter.put('/toggleEducatorStatus/:id',validateSchema(toggleEducatorSchema), EducatorController.toggleEducatorStatus)
-
 
 
 

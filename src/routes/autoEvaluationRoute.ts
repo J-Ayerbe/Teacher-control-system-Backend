@@ -17,5 +17,4 @@ autoEvaluationRoute.post('/labour', AutoEvaluationController.createLabour)
 autoEvaluationRoute.put('/labour/:id', AutoEvaluationController.updateLabour)
 autoEvaluationRoute.delete('/labour/:id', AutoEvaluationController.deleteLabour)
 //AutoEvaluations
-autoEvaluationRoute.put('/toggleAutoEvaluationStatus/:id', AutoEvaluationController.toggleAutoEvaluationStatus)
 autoEvaluationRoute.put('/updateAutoEvaluation/:id', AutoEvaluationController.updateAutoEvaluation)

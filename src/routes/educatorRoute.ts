@@ -12,11 +12,5 @@ educatorRouter.post('/addNotification',validateSchema(addNotificationSchema),Edu
 educatorRouter.post('/addAutoEvaluation',validateSchema(addAutoEvalSchema), EducatorController.addAutoEvaluation)
 educatorRouter.post('/addLabor',validateSchema(addLabourSchema),EducatorController.addLabor)
 educatorRouter.post('/getNotifications', EducatorController.getNotifications)
-educatorRouter.put('/updateEducator',validateSchema(updateEducatorSchema), EducatorController.updateEducator)
+educatorRouter.put('/updateEducator/:id',validateSchema(updateEducatorSchema), EducatorController.updateEducator)
 educatorRouter.put('/toggleEducatorStatus/:id',validateSchema(toggleEducatorSchema), EducatorController.toggleEducatorStatus)
-
-
-
-
-
-

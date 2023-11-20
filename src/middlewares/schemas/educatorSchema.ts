@@ -17,21 +17,13 @@ export const userSchema = z.object({
 });
 
 export const updateEducatorSchema = z.object({
-  educatorId: z.string(),
-  email: z.string().email("Not a valid email"),
-  docentType:z.enum(["Tiempo Completo", "Planta", "Cátedra"]),
-  idType: z.string().min(2).max(10),
-  title: z.string(),
-  firstName: z.string().min(1).max(50),
-  lastName: z.string().min(3).max(50),
-  role: z.enum(["Coordinador", "Decano", "Docente"]),
-  evaluated: z.object({
-    idEvaluated: z.string().min(5).max(30),
-    firstName: z.string().min(3).max(50),
-    lastName: z.string().min(3).max(50),
-    email: z.string().email("Not a valid email"),
-    role: z.enum(["Coordinador", "Decano", "Docente"]),
-  }), 
+  email: z.string().email("Not a valid email").optional(),
+  docentType:z.enum(["Tiempo Completo", "Planta", "Cátedra"]).optional(),
+  idType: z.string().min(2).max(10).optional(),
+  title: z.string().optional(),
+  firstName: z.string().min(1).max(50).optional(),
+  lastName: z.string().min(3).max(50).optional(),
+  role: z.enum(["Coordinador", "Decano", "Docente"]).optional(),
 });
 
 export const toggleEducatorSchema = z.object({
@@ -51,32 +43,10 @@ export const addAutoEvalSchema = z.object({
     endDate:  z.string()
   }),
   date: z.string(),
-  evaluator: z.object({
-    idEvaluator: z.string().min(5).max(30),
-    firstName:  z.string().min(3).max(50),
-    lastName:   z.string().min(3).max(50),
-    email: z.string().email("Not a valid email"),  
-    role: z.enum(["Coordinador", "Decano", "Docente"]),
-  }),
-  evaluated: z.object({
-    idEvaluated: z.string().min(5).max(30),
-    firstName:  z.string().min(3).max(50),
-    lastName:  z.string().min(3).max(50),
-    email: z.string().email("Not a valid email"),
-    role: z.enum(["Coordinador", "Decano", "Docente"]),
-  }),
+  evaluator: z.string().min(5).max(30),
+  evaluated: z.string().min(5).max(30),
   act: z.boolean(),
-  labour: z.object({ 
-    idLabour: z.string().min(5).max(30),
-    nameWork: z.string().min(3).max(30),
-    isActive: z.boolean(),
-    labourType: z.object({ 
-      idlabourType: z.number().int().gte(1).lte(14),
-      code: z.string().min(1).max(10),
-      description: z.string(),
-    }),
-    assignedHours: z.number().int().gte(1).lte(200),
-  })
+  labour: z.string().min(5).max(30),
 });
 
 export const addNotificationSchema = z.object({

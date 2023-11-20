@@ -47,48 +47,14 @@ const AutoEvaluationSchema = new Schema<IAutoEvaluation>({
         required:true
     },
     evaluator:{
-        idEvaluator:{
-            type:String,
-            required:true
-        },
-        firstName:{
-            type:String,
-            required:true
-        },
-        lastName:{
-            type:String,
-            required:true
-        },
-        email:{
-            type:String,
-            required:true
-        },
-        role:{
-            type:String,
-            required:true
-        },
+        type:String,
+        ref:"Educator",
+        required:true
     },
     evaluated:{
-        idEvaluated:{
-            type:String,
-            required:true
-        },
-        firstName:{
-            type:String,
-            required:true
-        },
-        lastName:{
-            type:String,
-            required:true
-        },
-        email:{
-            type:String,
-            required:true
-        },
-        role:{
-            type:String,
-            required:true
-        },
+        type:String,
+        ref:"Educator",
+        required:true
     },
     results:{
         type:String,
@@ -103,33 +69,9 @@ const AutoEvaluationSchema = new Schema<IAutoEvaluation>({
         type:String,
     },
     labour:{
-        idLabour:{
-            type:String,
-            ref:"Labour",
-            required:true
-        },
-        assignedHours:{
-            type:Number,
-            required:true
-        },
-        isActive:{
-            type:Boolean,
-            required:true
-        },
-        labourType:{
-            idlabourType:{
-                type:Number,
-                required:true
-            },
-            code:{
-                type:String,
-                required:true
-            },
-            description:{
-                type:String,
-                required:true
-            }
-        }
+        type:String,
+        ref:"Labour",
+        required:true
     },
     evidencesLink:{
         type:String

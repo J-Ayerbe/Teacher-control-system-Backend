@@ -2,7 +2,7 @@ import { PeriodController } from './periodController';
 import { LabourController } from './labourController';
 import { NotificationController } from "./notificationController";
 import { AutoEvaluation } from "../models/autoEvaluationModel";
-import { Request,Response } from 'express';
+import { NextFunction, Request,Response } from 'express';
 
 
 //Este controlador actuara como una fachada para el servicio de autoevaluacion
@@ -54,8 +54,8 @@ export class AutoEvaluationController{
  static async getLabourById(req: Request, res: Response){
     return await LabourController.getLabourById(req, res);
   }
-static  async createLabour(req: Request, res: Response){
-    return await LabourController.createLabour(req, res);
+static  async createLabour(req: Request, res: Response,next:NextFunction){
+    return await LabourController.createLabour(req, res,next);
   }
   static  async getLabourTypes(req: Request, res: Response){
     return await LabourController.getLabourTypes(req, res);

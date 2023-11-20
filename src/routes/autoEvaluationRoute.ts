@@ -14,6 +14,7 @@ autoEvaluationRoute.post('/period',validateSchema(periodSchema), AutoEvaluationC
 autoEvaluationRoute.get('/labours', AutoEvaluationController.getLabours)
 autoEvaluationRoute.get('/labour/:id', AutoEvaluationController.getLabourById)
 autoEvaluationRoute.post('/labour', AutoEvaluationController.createLabour)
+autoEvaluationRoute.post('/labourType', AutoEvaluationController.createLabourType)
 autoEvaluationRoute.put('/labour/:id', AutoEvaluationController.updateLabour)
 autoEvaluationRoute.delete('/labour/:id', AutoEvaluationController.deleteLabour)
 //AutoEvaluations

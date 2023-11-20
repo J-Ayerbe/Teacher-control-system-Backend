@@ -29,6 +29,11 @@ export class LabourController   {
     await labour.save();
     res.status(201).json({ message: "createLabour"});
   }
+  static async createLabourType(req:Request,res:Response){
+    const labourType=new LabourType(req.body)
+    await labourType.save();
+    res.status(201).json({ message: "createLabourType"});
+  }
  static async updateLabour(req: Request, res: Response){
     try{
       const updatedLabour = await Labour.findByIdAndUpdate(req.params.id, req.body, { new: true });

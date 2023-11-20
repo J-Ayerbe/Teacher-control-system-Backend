@@ -69,6 +69,9 @@ export class AutoEvaluationController{
 static  async createLabour(req: Request, res: Response){
     return await LabourController.createLabour(req, res);
   }
+  static  async createLabourType(req: Request, res: Response){
+    return await LabourController.createLabourType(req, res);
+  }
   static async updateLabour(req: Request, res: Response){
     return await LabourController.updateLabour(req, res);
   }

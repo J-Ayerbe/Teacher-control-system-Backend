@@ -4,8 +4,7 @@ export interface Period {
   year:string,
   semester:number,
   startDate:Date,
-  endDate:Date,
-  autoEvaluations:string[]
+  endDate:Date
 }
 
 enum DocentType {
@@ -65,14 +64,10 @@ export interface AutoEvaluation{
 
 export interface Labour{
   readonly _id?: string;
-  description:string,
-  hours:number,
-  labourType:string,
+  labourType:LabourType,
   assignedHours:number
   isActive:boolean,
   nameWork:string,
-  code:string,
-  idlabourType:number
 }
 
 export interface LabourType{

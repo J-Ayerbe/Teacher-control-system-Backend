@@ -16,7 +16,7 @@ export class LabourController   {
   }
  static async getLabourById(req: Request, res: Response){
     try{
-      const response=await Labour.findById(req.params.id);
+      const response=await Labour.findById(req.params.id).populate('labourType').exec();
 
       res.status(200).json(response);
     }catch(error){
@@ -28,6 +28,11 @@ export class LabourController   {
     const labour=new Labour(req.body)
     await labour.save();
     res.status(201).json({ message: "createLabour"});
+  }
+  static async createLabourType(req:Request,res:Response){
+    const labourType=new LabourType(req.body)
+    await labourType.save();
+    res.status(201).json({ message: "createLabourType"});
   }
  static async updateLabour(req: Request, res: Response){
     try{

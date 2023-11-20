@@ -7,15 +7,13 @@ const LabourTypeSchema = new Schema<ILabourType>({
   _id: { type: String, default: () => nanoid() },
   idLabourType: {
     type: Number,
-    min: 1,
-    max: 10,
     required: true,
-    unique: true,
+    unique:true
   },
   code: {
     type: String,
     required: true,
-    unique: true,
+    unique:true
   },
   description: {
     type: String,

@@ -12,6 +12,7 @@ autoEvaluationRoute.get('/period/:id', AutoEvaluationController.getPeriodById)
 autoEvaluationRoute.post('/period',validateSchema(periodSchema), AutoEvaluationController.createPeriod)
 //Labours
 autoEvaluationRoute.get('/labours', AutoEvaluationController.getLabours)
+autoEvaluationRoute.get('/labourTypes', AutoEvaluationController.getLabourTypes)
 autoEvaluationRoute.get('/labour/:id', AutoEvaluationController.getLabourById)
 autoEvaluationRoute.post('/labour', AutoEvaluationController.createLabour)
 autoEvaluationRoute.post('/labourType', AutoEvaluationController.createLabourType)

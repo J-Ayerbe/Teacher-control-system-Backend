@@ -7,7 +7,7 @@ export class LabourController   {
   static async getLabours(_req: Request, res:Response){
     try{
       const response=await Labour.find().populate('labourType').exec();
-     
+
 
       res.status(200).json(response);
     }catch(error){
@@ -26,9 +26,15 @@ export class LabourController   {
 
   }
   static async createLabour(req: Request, res: Response){
-    const labour=new Labour(req.body)
+    try {
+       const labour=new Labour(req.body)
     await labour.save();
     res.status(201).json({ message: "createLabour"});
+    } catch (error) {
+       res.status(500).json({ error});
+      console.log(error)
+    }
+
   }
   static async createLabourType(req:Request,res:Response){
     const labourType=new LabourType(req.body)
@@ -44,7 +50,7 @@ export class LabourController   {
         res.status(404).json({ message: "Labour not found" });
       }
     }catch(error){
-        res.status(500).json({ error: error });
+        res.status(500).json({ error });
     }
 
   }
@@ -59,17 +65,17 @@ export class LabourController   {
       }
 
     }catch(error){
-      res.status(500).json({ error:error });
+      res.status(500).json({ error });
     }
 
   }
- static async getTypeLabours(_req: Request, res:Response){
+ static async getLabourTypes(_req: Request, res:Response){
     try{
       const response=await LabourType.find();
 
       res.status(200).json(response);
     }catch(error){
-      res.status(500).json({ error:error });
+      res.status(500).json({ error });
     }
 
   }
@@ -79,7 +85,7 @@ export class LabourController   {
 
       res.status(200).json(response);
     }catch(error){
-      res.status(500).json({ error:error });
+      res.status(500).json({ error });
     }
 
   }

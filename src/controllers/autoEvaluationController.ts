@@ -24,12 +24,12 @@ export class AutoEvaluationController{
     try {
       const updateAutoEvaluation = await AutoEvaluation.findByIdAndUpdate(req.params.id, req.body, { new: true });
       if (!updateAutoEvaluation) {
-        res.status(404).json({ message: "AutoEvaluation not found" });      
+        res.status(404).json({ message: "AutoEvaluation not found" });
       }else{
         res.status(200).json({ message: "AutoEvaluation updated" });
-      }  
+      }
     } catch (error) {
-      res.status(500).json({ error: error });   
+      res.status(500).json({ error: error });
     }
   }
 
@@ -56,6 +56,9 @@ export class AutoEvaluationController{
   }
 static  async createLabour(req: Request, res: Response){
     return await LabourController.createLabour(req, res);
+  }
+  static  async getLabourTypes(req: Request, res: Response){
+    return await LabourController.getLabourTypes(req, res);
   }
   static  async createLabourType(req: Request, res: Response){
     return await LabourController.createLabourType(req, res);

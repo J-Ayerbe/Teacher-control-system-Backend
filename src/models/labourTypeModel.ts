@@ -21,5 +21,9 @@ const LabourTypeSchema = new Schema<ILabourType>({
   },
 });
 
-
+LabourTypeSchema.methods.toJSON = function () {
+  const { __v, _id,  ...laborType } = this.toObject();
+  laborType.uid = _id;
+  return laborType;
+};
 export const LabourType = model("LabourType", LabourTypeSchema);

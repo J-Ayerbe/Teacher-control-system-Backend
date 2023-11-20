@@ -7,7 +7,7 @@ const LabourSchema = new Schema<ILabour>({
   _id: { type: String, default: () => nanoid()  },
   nameWork:{
    type: String,
-    required: true, 
+    required: true,
   },
  isActive: {
     type: Boolean,
@@ -23,5 +23,10 @@ const LabourSchema = new Schema<ILabour>({
     required: true,
   },
 });
+LabourSchema.methods.toJSON = function () {
+  const { __v, _id,  ...labor } = this.toObject();
+  labor.uid = _id;
+  return labor;
+};
 
 export const Labour = model("Labour", LabourSchema);

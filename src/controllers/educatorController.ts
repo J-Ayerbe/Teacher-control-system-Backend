@@ -33,7 +33,7 @@ export class EducatorController {
  static async updateEducator(req: Request, res: Response) {
     try {
       const updatedEducator = await Educator.findByIdAndUpdate(
-        req.params.id,
+        req.body.educatorId,
         req.body,
         { new: true }
       );

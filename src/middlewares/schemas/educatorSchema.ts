@@ -18,7 +18,7 @@ export const userSchema = z.object({
 
 export const updateEducatorSchema = z.object({
   email: z.string().email("Not a valid email").optional(),
-  isActive: z.boolean(),
+  isActive: z.boolean().optional(),
   docentType:z.enum(["Tiempo Completo", "Planta", "Cátedra"]).optional(),
   idType: z.string().min(2).max(10).optional(),
   title: z.string().optional(),

@@ -23,10 +23,20 @@ const LabourSchema = new Schema<ILabour>({
     required: true,
   },
 });
-LabourSchema.methods.toJSON = function () {
-  const { __v, _id,  ...labor } = this.toObject();
-  labor.uid = _id;
-  return labor;
-};
+LabourSchema.set('toJSON', {
+  versionKey: false,
+  transform: function (doc, ret) {
+    // remove these props when object is serialized
+     ret.uid = ret._id;
+    delete ret._id;
+  }
+});
 
+LabourSchema.set('toObject', {
+  transform: (document, returnedObject) => {
+    returnedObject.uid = returnedObject._id
+    delete returnedObject._id
+    delete returnedObject.__v
+  }
+})
 export const Labour = model("Labour", LabourSchema);

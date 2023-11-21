@@ -79,10 +79,22 @@ const EducatorSchema = new Schema<IEducator>({
   ],
 });
 
-EducatorSchema.methods.toJSON = function () {
-  const { __v, _id, password, ...user } = this.toObject();
-  user.uid = _id;
-  return user;
-};
+EducatorSchema.set('toJSON', {
+  versionKey: false,
+  transform: function (doc, ret) {
+    // remove these props when object is serialized
+     ret.uid = ret._id;
+    delete ret._id;
+    delete ret.password
+  }
+});
 
+EducatorSchema.set('toObject', {
+  transform: (document, returnedObject) => {
+    returnedObject.uid = returnedObject._id
+    delete returnedObject._id
+    delete returnedObject.__v
+    delete returnedObject.password
+  }
+})
 export const Educator = model("Educator", EducatorSchema);

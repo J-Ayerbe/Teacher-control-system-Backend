@@ -21,11 +21,21 @@ const NotificationSchema = new Schema<INotification>({
     }
 });
 
-NotificationSchema.methods.toJSON = function () {
-  const { __v, _id, ...period } = this.toObject();
-  period.uid = _id;
-  return period;
-};
+NotificationSchema.set('toJSON', {
+  versionKey: false,
+  transform: function (doc, ret) {
+    // remove these props when object is serialized
+     ret.uid = ret._id;
 
+  }
+});
 
+NotificationSchema.set('toObject', {
+  transform: (document, returnedObject) => {
+    returnedObject.uid = returnedObject._id
+    delete returnedObject._id
+    delete returnedObject.__v
+
+  }
+})
 export const Notification = model("Notification", NotificationSchema);

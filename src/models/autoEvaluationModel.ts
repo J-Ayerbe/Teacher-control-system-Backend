@@ -78,10 +78,20 @@ const AutoEvaluationSchema = new Schema<IAutoEvaluation>({
     }
 });
 
-AutoEvaluationSchema.methods.toJSON = function () {
-  const { __v, _id, ...autoEvaluation } = this.toObject();
-  autoEvaluation.uid = _id;
-  return autoEvaluation;
-};
+AutoEvaluationSchema.set('toJSON', {
+  versionKey: false,
+  transform: function (doc, ret) {
+    // remove these props when object is serialized
+     ret.uid = ret._id;
 
+  }
+});
+
+AutoEvaluationSchema.set('toObject', {
+  transform: (document, returnedObject) => {
+    returnedObject.uid = returnedObject._id
+    delete returnedObject._id
+    delete returnedObject.__v
+  }
+})
 export const AutoEvaluation = model("AutoEvaluation", AutoEvaluationSchema);

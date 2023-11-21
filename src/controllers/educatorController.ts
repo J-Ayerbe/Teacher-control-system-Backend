@@ -6,21 +6,22 @@ import { Educator } from "../models/educatorModel";
 
 
 export class EducatorController {
-  static getEducators = tryCatchFn(async (_req: Request, res: Response) => {
-    const educators = await Educator.find();
-    res.status(200).json({ educators });
-  });
+ static getEducators = tryCatchFn(async (_req: Request, res: Response) => {
+    const educators = await Educator.find().populate('labours');
+    res.status(200).json(educators);
+});
+
 
   static getEducatorById = tryCatchFn(
     async (req: Request, res: Response, next: NextFunction) => {
       const { id } = req.params;
-      const educator = await Educator.findById(id);
+      const educator = await Educator.findById(id).populate('labours');
 
       if (!educator) {
         return next(new AppError("Educator not found", 404));
       }
 
-      res.status(200).json({ educator });
+      res.status(200).json(educator );
     }
   );
 
@@ -124,7 +125,7 @@ export class EducatorController {
       path: "autoEvaluations",
       match: {"period.year": req.query.year},
     }).exec();
-    
+
     if (!educator) {
       res.status(404).json({ message: "Educator not found",
       id: req.query.id,

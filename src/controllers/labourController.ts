@@ -3,6 +3,7 @@ import { AppError } from "./../helpers/errorHandler";
 import { NextFunction, Request, Response } from "express";
 import { Labour } from "../models/labourModel";
 import { LabourType } from "../models/labourTypeModel";
+import { Educator } from '../models/educatorModel';
 
 export class LabourController {
 
@@ -94,6 +95,33 @@ export class LabourController {
       res.status(500).json({ error });
     }
   }
+
+
+static async assignLabour(req: Request, res: Response) {
+    try {
+      const {uid, labours}=req.body; // assuming labours is an array of labour IDs
+
+      const educator=await Educator.findById(uid);
+
+      if(!educator){
+       return res.status(404).json({ message: "Educator not found" });
+      }
+
+      for (let labourId of labours) {
+        const labour = await Labour.findById(labourId);
+        if (!labour) {
+           return res.status(404).json({ message: `Labour with id ${labourId} not found` });
+        }
+      }
+
+      educator.labours = labours;
+      await educator.save()
+      return res.status(200).json({ message: "Labours assigned correctly" });
+    } catch (error) {
+      return res.status(500).json({ error });
+    }
+}
+
 
   static async getTypeLabourById(req: Request, res: Response) {
     try {

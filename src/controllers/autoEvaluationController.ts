@@ -69,7 +69,9 @@ static  async createLabour(req: Request, res: Response,next:NextFunction){
  static async deleteLabour(req: Request, res: Response){
     return await LabourController.deleteLabour(req, res);
   }
-
+static async assignLabour(req: Request, res: Response){
+    return await LabourController.assignLabour(req, res);
+  }
   // NotificationController
   static async createNotification(req: Request, res: Response){
     return await NotificationController.createNotification(req, res);

@@ -43,8 +43,11 @@ export const renewToken = (refreshToken: string): Promise<string> => {
         reject("Invalid refresh token");
       } else {
         try {
+
+
           const latestUser:any = await getUserFromDatabase(user.uid);
-          const token = await generateToken(latestUser.uid, latestUser.role);
+
+          const token = await generateToken(latestUser._id, latestUser.role);
           resolve(token);
         } catch (error) {
           reject("Could not generate token");

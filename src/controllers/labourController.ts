@@ -52,7 +52,6 @@ export class LabourController {
 
   static async updateLabour(req: Request, res: Response) {
     try {
-      console.log("llego");
       const update = req.body;
       const { id } = req.params;
       const updatedLabour = await Labour.findByIdAndUpdate(

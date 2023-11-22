@@ -21,6 +21,8 @@ const LabourSchema = new Schema<ILabour>({
   assignedHours: {
     type: Number,
     required: true,
+    min:2,
+    max:18
   },
 });
 LabourSchema.set('toJSON', {

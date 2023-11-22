@@ -1,10 +1,14 @@
 import { z } from "zod";
 
-const labourSchema = z.object({
+export const labourSchema = z.object({
   nameWork:z.string(),
   isActive: z.boolean(),
   labourType: z.string(),
-  assignedHours: z.number().int().min(1).max(100),
+  assignedHours: z.number().int().min(2).max(18),
 }).strict("Se enviaron campos que no están permitidos")
 
-export default labourSchema;
+export const labourUpdateSchema = z.object({
+  nameWork:z.string(),
+  isActive: z.boolean(),
+  labourType: z.string(),
+}).strict("Se enviaron campos que no están permitidos")

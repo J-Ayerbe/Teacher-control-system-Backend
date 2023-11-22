@@ -45,6 +45,5 @@ export const validarJWT = async (req, res: Response, next: NextFunction) => {
 
   req.uid = currentToken.uid;
   req.role = currentToken.role;
-
   next();
 };

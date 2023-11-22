@@ -3,10 +3,10 @@ import { AppError } from "./../helpers/errorHandler";
 import { NextFunction, Request, Response } from "express";
 import { Labour } from "../models/labourModel";
 import { LabourType } from "../models/labourTypeModel";
-import { Educator } from '../models/educatorModel';
+import { Educator } from "../models/educatorModel";
+import { DocentType } from "../models/interfaces/interfaces";
 
 export class LabourController {
-
   static async getLabours(_req: Request, res: Response) {
     try {
       const response = await Labour.find().populate("labourType").exec();
@@ -31,19 +31,16 @@ export class LabourController {
 
   static createLabour = tryCatchFn(
     async (req: Request, res: Response, next: NextFunction) => {
+      const { labourType: labourTypeUid } = req.body;
+      const labourType = await LabourType.findById(labourTypeUid);
 
-        const { labourType: labourTypeUid } = req.body;
-        const labourType = await LabourType.findById(labourTypeUid);
+      if (!labourType) {
+        return next(new AppError("El tipo de labor no se ha encontrado", 404));
+      }
+      const labour = new Labour(req.body);
 
-        if (!labourType) {
-          return next(
-            new AppError("El tipo de labor no se ha encontrado", 404)
-          );
-        }
-        const labour = new Labour(req.body);
-
-        await labour.save();
-        res.status(201).json({ message: "Labor creada correctamente" });
+      await labour.save();
+      res.status(201).json({ message: "Labor creada correctamente" });
     }
   );
 
@@ -55,13 +52,13 @@ export class LabourController {
 
   static async updateLabour(req: Request, res: Response) {
     try {
-      console.log("llego")
-      const update=req.body;
-      const {id}=req.params;
+      console.log("llego");
+      const update = req.body;
+      const { id } = req.params;
       const updatedLabour = await Labour.findByIdAndUpdate(
         id,
-       { $set: update },
-      { new: true }
+        { $set: update },
+        { new: true }
       );
       if (updatedLabour) {
         res.status(200).json({ message: "updateLabour", data: updatedLabour });
@@ -96,32 +93,63 @@ export class LabourController {
     }
   }
 
-
-static async assignLabour(req: Request, res: Response) {
+  static async assignLabour(req: Request, res: Response) {
     try {
-      const {uid, labours}=req.body; // assuming labours is an array of labour IDs
+      const { uid, labours } = req.body; // assuming labours is an array of labour IDs
 
-      const educator=await Educator.findById(uid);
+      const educator = await Educator.findById(uid);
 
-      if(!educator){
-       return res.status(404).json({ message: "Educator not found" });
+      if (!educator) {
+        return res.status(404).json({ message: "Educator not found" });
       }
+      const educatorType = educator.docentType;
 
-      for (let labourId of labours) {
-        const labour = await Labour.findById(labourId);
+      const docentTypeHours = {
+        [DocentType.Catedra]: {
+          max: 12,
+          min: 2,
+        },
+        [DocentType.Planta]: {
+          max: 8,
+          min: 4,
+        },
+        [DocentType.TC]: {
+          max: 16,
+          min: 6,
+        },
+        [DocentType.Otro]: {
+          max: 18,
+          min: 2,
+        },
+      };
+      let labourPromises = labours.map((labourId) => Labour.findById(labourId));
+
+      const laboursData = await Promise.all(labourPromises);
+
+      for (let labour of laboursData) {
         if (!labour) {
-           return res.status(404).json({ message: `Labour with id ${labourId} not found` });
+          throw new Error(`Labour with id ${labour._id} not found`);
+        }
+        if (labour.assignedHours > docentTypeHours[educatorType].max) {
+          throw new Error(
+            `Labour with id ${labour._id} has more hours than allowed`
+          );
+        }
+        if (labour.assignedHours < docentTypeHours[educatorType].min) {
+          throw new Error(
+            `Labour with id ${labour._id} has less hours than allowed`
+          );
         }
       }
 
-      educator.labours = labours;
-      await educator.save()
+      educator.labours = laboursData;
+      await educator.save();
+
       return res.status(200).json({ message: "Labours assigned correctly" });
     } catch (error) {
       return res.status(500).json({ error });
     }
-}
-
+  }
 
   static async getTypeLabourById(req: Request, res: Response) {
     try {

@@ -15,18 +15,19 @@ import cors from 'cors'
 import cookieParser  from "cookie-parser";
 import { authRouter } from './routes/authRouter';
 import { errorHandler } from './helpers/errorHandler';
-
+import helmet from "helmet";
 
 const app = express();
 
 dbConnection();
-
+app.use(helmet());
 app.use(cors({
     origin: 'http://localhost:5173',
     credentials: true,
 }));
 app.use(express.json());
 app.use(cookieParser());
+
 app.use('/api/educators', educatorRouter);
 app.use('/api/autoEvaluations', autoEvaluationRoute)
 app.use('/api/notification', notificationRouter );

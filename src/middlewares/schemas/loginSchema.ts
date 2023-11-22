@@ -7,6 +7,6 @@ const loginSchema = z.object({
   }).max(15, {
     message: "Password must be at most 15 characters long",
   }),
-});
+}).strict("Se enviaron campos que no están permitidos")
 
 export default loginSchema;

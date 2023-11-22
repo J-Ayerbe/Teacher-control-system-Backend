@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { z } from "zod";
+import { ZodObject } from "zod";
 import { fromZodError } from "zod-validation-error";
 
-type ValidationSchema = ReturnType<typeof z.object>;
+type ValidationSchema = InstanceType<typeof ZodObject>;
 
 const validateSchema =
   (schema: ValidationSchema) =>

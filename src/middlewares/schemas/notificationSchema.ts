@@ -6,9 +6,9 @@ export const notificationSchema = z.object({
     content: z.string().min(3).max(500),
     date: z.string().min(3).max(15),
     read: z.boolean(),
-});
+}).strict("Se enviaron campos que no están permitidos")
 
 export const sendEmailSchema = z.object({
     email: z.string().email(),
     content: z.string().min(3).max(500),
-});
+}).strict("Se enviaron campos que no están permitidos")

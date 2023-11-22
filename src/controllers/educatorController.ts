@@ -1,27 +1,33 @@
-import { AutoEvaluationController } from './autoEvaluationController';
+import { AutoEvaluationController } from "./autoEvaluationController";
 import { AppError } from "./../helpers/errorHandler";
 import { tryCatchFn } from "./../helpers/customTryCatch";
 import { NextFunction, Request, Response } from "express";
 import { Educator } from "../models/educatorModel";
-
+import { EducatorRole } from '../models/interfaces/interfaces';
 
 export class EducatorController {
- static getEducators = tryCatchFn(async (_req: Request, res: Response) => {
-    const educators = await Educator.find().populate('labours');
+  static getEducatorsByRole = tryCatchFn(async (req: Request, res: Response) => {
+    let {role}= req.params
+    role = role.charAt(0).toUpperCase() + role.slice(1).toLowerCase();
+    const educators = await Educator.find({role:role}).populate([
+    { path: "labours" },
+    { path: "autoEvaluations" },
+    { path: "notifications" }
+  ]);
     res.status(200).json(educators);
-});
+  });
 
 
   static getEducatorById = tryCatchFn(
     async (req: Request, res: Response, next: NextFunction) => {
       const { id } = req.params;
-      const educator = await Educator.findById(id).populate('labours');
+      const educator = await Educator.findById(id).populate("labours");
 
       if (!educator) {
         return next(new AppError("Educator not found", 404));
       }
 
-      res.status(200).json(educator );
+      res.status(200).json(educator);
     }
   );
 
@@ -31,23 +37,32 @@ export class EducatorController {
     return res.status(201).json({ message: "Educator created" });
   });
 
- static updateEducator=  tryCatchFn(async(req: Request, res: Response) =>{
-      const {id}=req.params;
+  static updateEducator = tryCatchFn(
+    async (req: Request, res: Response, next: NextFunction) => {
+      const { id } = req.params;
       const update = req.body;
-      const updatedEducator = await Educator.findByIdAndUpdate(
-        id,
-      { $set: update },
-      { new: true }
-      );
-      if (updatedEducator) {
-        res.status(200).json({ message: "Educator updated" });
-      } else {
-        res.status(404).json({ message: "Educator not found" });
+      const educator = await Educator.findById(id);
+      if (!educator) {
+        return next(new AppError("No se ha encontrado el docente", 404));
       }
-  })
 
+      // Check the role
+      if (educator.role === EducatorRole.Coordinador || educator.role === EducatorRole.Decano) {
+        return next(
+          new AppError(
+            "No tienes permitido  actualizar el rol a este educador",
+            403
+          )
+        );
+      }
+      educator.set(update);
+      await educator.save();
 
- static async addNotification(req: Request, res: Response) {
+      res.status(200).json({ message: "Educator updated" });
+    }
+  );
+
+  static async addNotification(req: Request, res: Response) {
     const data = req.body;
     // Buscamos al educador por su id
     const educator = await Educator.findById(data.educatorId);
@@ -77,10 +92,11 @@ export class EducatorController {
       res.status(404).json({ message: "Educator not found" });
     } else {
       // Agregamos la autoevaluación al educador
-      const autoevaluacionId = await AutoEvaluationController.createAutoEvaluation(req, res);
+      const autoevaluacionId =
+        await AutoEvaluationController.createAutoEvaluation(req, res);
       if (!autoevaluacionId) {
         res.status(404).json({ message: "AutoEvaluation not created" });
-      }else{
+      } else {
         educator.autoEvaluations.push(autoevaluacionId);
         await educator.save();
         res.status(200).json({ message: "AutoEvaluation added" });
@@ -88,8 +104,7 @@ export class EducatorController {
     }
   }
 
-
- static async getNotifications(req: Request, res: Response) {
+  static async getNotifications(req: Request, res: Response) {
     const educator = await Educator.findById(req.body.id)
       .populate({
         path: "notifications",
@@ -104,38 +119,40 @@ export class EducatorController {
     }
   }
 
-  static  async addLabor(req: Request, res:Response){
-        const data = req.body;
-        const educator = await Educator.findById(data.educatorId);
-        if (!educator) {
-            res.status(404).json({ message: "Educator not found" });
-        }
-        else{
-            // Agregamos la labor al educador
-            educator.labours.push(data.labours);
-            await educator.save();
+  static async addLabor(req: Request, res: Response) {
+    const data = req.body;
+    const educator = await Educator.findById(data.educatorId);
+    if (!educator) {
+      res.status(404).json({ message: "Educator not found" });
+    } else {
+      // Agregamos la labor al educador
+      educator.labours.push(data.labours);
+      await educator.save();
 
-            res.status(200).json({ message: "Labor added" });
-        }
+      res.status(200).json({ message: "Labor added" });
+    }
   }
 
   static async getAutoEvalByPeriod(req: Request, res: Response) {
     const educator = await Educator.findById(req.query.id)
-    .populate({
-      path: "autoEvaluations",
-      match: {"period.year": req.query.year},
-    }).exec();
+      .populate({
+        path: "autoEvaluations",
+        match: { "period.year": req.query.year },
+      })
+      .exec();
 
     if (!educator) {
-      res.status(404).json({ message: "Educator not found",
-      id: req.query.id,
-      year:req.query.year });
-    } else {
-      res.status(200).json({ data: educator.autoEvaluations,
+      res.status(404).json({
+        message: "Educator not found",
         id: req.query.id,
-        year:req.query.year});
+        year: req.query.year,
+      });
+    } else {
+      res.status(200).json({
+        data: educator.autoEvaluations,
+        id: req.query.id,
+        year: req.query.year,
+      });
     }
-
   }
-
 }

@@ -6,6 +6,6 @@ const periodSchema = z.object({
     semester: z.number().int().gte(1).lte(2),
     startDate: z.date(),
     endDate: z.date(),
-});
+}).strict("Se enviaron campos que no están permitidos")
 
 export default periodSchema;

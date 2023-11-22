@@ -1,4 +1,4 @@
-import { Educator as IEducator } from "./interfaces/interfaces";
+import { DocentType, EducatorRole, Educator as IEducator } from './interfaces/interfaces';
 import { Schema, model } from "mongoose";
 import { nanoid } from 'nanoid';
 
@@ -20,7 +20,7 @@ const EducatorSchema = new Schema<IEducator>({
   },
   docentType: {
     type: String,
-    enum:["Tiempo Completo", "Planta", "Cátedra"],
+    enum: Object.values(DocentType),
     validate: {
       validator: function() {
         // If role is "Docente", docentType must be provided
@@ -60,10 +60,10 @@ const EducatorSchema = new Schema<IEducator>({
     type: String,
     default: null,
   },
-  role:{
-    type:String,
-    required:true,
-    enum:["Coordinador","Decano","Docente"]
+   role: {
+    type: String,
+    default: "Docente",
+    enum: Object.values(EducatorRole),
   },
   notifications: [
   {

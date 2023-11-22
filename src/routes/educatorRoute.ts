@@ -6,7 +6,7 @@ import { Router } from 'express'
 
 export const educatorRouter = Router()
 
-educatorRouter.get('/getEducators', EducatorController.getEducators)
+educatorRouter.get('/getEducators/:role', EducatorController.getEducatorsByRole)
 educatorRouter.get('/getEducator/:id', EducatorController.getEducatorById)
 educatorRouter.get('/getAutoEvalByPeriod', EducatorController.getAutoEvalByPeriod)
 educatorRouter.post('/addNotification',validateSchema(addNotificationSchema),EducatorController.addNotification)
@@ -14,9 +14,3 @@ educatorRouter.post('/addAutoEvaluation',validateSchema(addAutoEvalSchema), Educ
 educatorRouter.post('/addLabor',validateSchema(addLabourSchema),EducatorController.addLabor)
 educatorRouter.post('/getNotifications', EducatorController.getNotifications)
 educatorRouter.put('/updateEducator/:id',validateSchema(updateEducatorSchema), EducatorController.updateEducator)
-
-
-
-
-
-

@@ -32,6 +32,7 @@ export const validarJWT = async (req, res: Response, next: NextFunction) => {
         try {
           const  token = await renewToken(refreshTokenCookie);
           currentToken = jwt.decode(token);
+          console.log("currentotken", currentToken)
           res.cookie("jwtToken", token, { httpOnly: true });
         } catch (error) {
           return next(new AppError("Could not refresh token", 401));

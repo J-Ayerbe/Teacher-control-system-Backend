@@ -97,13 +97,9 @@ export class AuthController {
       const hashedPassword = bcrypt.hashSync(password, salt);
       const user = new Educator({ ...body, password: hashedPassword });
       await user.save({ session });
-      const token = await generateToken(user._id, user.role);
-      const refreshToken = await generateRefreshToken(user._id);
       await session.commitTransaction();
 
       return res
-        .cookie("jwtToken", token, tokenCookieOptions)
-        .cookie("refreshToken", refreshToken, refreshTokenCookieOptions)
         .status(201)
         .json({
           message: "Usuario registrado correctamente",

@@ -34,3 +34,4 @@ autoEvaluationRoute.put('/labour/:id',[validateSchema(labourUpdateSchema),valida
 autoEvaluationRoute.delete('/labour/:id', AutoEvaluationController.deleteLabour)
 //AutoEvaluations
 autoEvaluationRoute.put('/updateAutoEvaluation/:id', AutoEvaluationController.updateAutoEvaluation)
+autoEvaluationRoute.post('/createAutoEvaluation', AutoEvaluationController.createAutoEvaluation)

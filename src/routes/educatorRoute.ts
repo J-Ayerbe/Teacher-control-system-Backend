@@ -24,3 +24,5 @@ educatorRouter.post('/addLabor',validateSchema(addLabourSchema),[validarJWT,chec
 educatorRouter.post('/getNotifications',[validarJWT,checkRole([coordinador])], EducatorController.getNotifications)
 
 educatorRouter.put('/updateEducator/:id',validateSchema(updateEducatorSchema),[validarJWT,checkRole([coordinador])], EducatorController.updateEducator)
+
+educatorRouter.get('/getNoti',EducatorController.getNoti)

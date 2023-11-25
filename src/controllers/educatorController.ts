@@ -138,8 +138,13 @@ export class EducatorController {
   static async getAutoEvalByPeriod(req: Request, res: Response) {
     const educator = await Educator.findById(req.query.id)
       .populate({
+        //Realizamos un populate para obtener las autoevaluaciones del educador
+        //match: de period.year y period.semester
         path: "autoEvaluations",
-        match: { "period.year": req.query.year },
+        match: {
+          "period.year": req.query.year,
+          "period.semester": req.query.semester,
+        },
       })
       .exec();
 
@@ -151,9 +156,7 @@ export class EducatorController {
       });
     } else {
       res.status(200).json({
-        data: educator.autoEvaluations,
-        id: req.query.id,
-        year: req.query.year,
+        data: educator.autoEvaluations
       });
     }
   }

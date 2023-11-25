@@ -8,19 +8,15 @@ const AutoEvaluationSchema = new Schema<IAutoEvaluation>({
     state:{
         type:String,
         required:true,
+        default:"En ejecución",
         enum:["En ejecución","Terminado","Suspendido"]
     },
     puntuation:{
         type:Number,
-        required:true,
         min:0,
         max:100
     },
     period:{
-        idPeriod:{
-            type:String,
-            required:true
-        },
         name:{
             type:String,
             required:true
@@ -44,7 +40,8 @@ const AutoEvaluationSchema = new Schema<IAutoEvaluation>({
     },
     date:{
         type:Date,
-        required:true
+        required:true,
+        default:Date.now
     },
     evaluator:{
         type:String,

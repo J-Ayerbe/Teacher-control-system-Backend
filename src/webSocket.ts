@@ -20,8 +20,7 @@ const wsServer = new WebSocketServer({
 
 // Función para enviar un mensaje a través de WebSocket
 function enviarMensajeWebSocket(mensaje) {
-    // Encontrar la conexión adecuada (puedes tener lógica adicional aquí)
-    const connection = obtenerConexionAppropriate(); // Implementa obtenerConexionAppropriate
+    const connection = obtenerConexionAppropriate();
     //Enviamos el mensaje a todos los clientes conectados
     for (let i = 0; i < connection.length; i++) {
         // Verifica si la conexión existe y está abierta
@@ -50,10 +49,6 @@ wsServer.on("request", (request) =>{
 });
 
 function obtenerConexionAppropriate() {
-    // Implementa la lógica necesaria para obtener la conexión adecuada
-    // Puedes almacenar las conexiones activas en un array u otra estructura de datos
-    // y buscar la conexión que corresponde a tu lógica específica
-    // En este ejemplo, simplemente devuelve la primera conexión aceptada.
     const connections = wsServer.connections;
     //Aceptar varias conexiones
     if (connections.length > 0) {

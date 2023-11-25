@@ -101,6 +101,8 @@ export class EducatorController {
       } else {
         educator.autoEvaluations.push(autoevaluacionId);
         await educator.save();
+        // Enviar un mensaje al servidor WebSocket
+        eventEmitter.emit('enviarMensajeWebSocket', 'Se ha agregado una nueva autoevaluación');
         res.status(200).json({ message: "AutoEvaluation added" });
       }
     }
@@ -138,8 +140,6 @@ export class EducatorController {
   static async getAutoEvalByPeriod(req: Request, res: Response) {
     const educator = await Educator.findById(req.query.id)
       .populate({
-        //Realizamos un populate para obtener las autoevaluaciones del educador
-        //match: de period.year y period.semester
         path: "autoEvaluations",
         match: {
           "period.year": req.query.year,
@@ -162,7 +162,6 @@ export class EducatorController {
   }
 
   static async getNoti(_req: Request, res: Response){
-    // En tu controlador en el servidor en el puerto 3000
     // Puedes emitir un evento para enviar un mensaje al servidor WebSocket
     eventEmitter.emit('enviarMensajeWebSocket', 'Hola desde el controlador');
     res.status(200).json({message: "Mensaje enviado"});

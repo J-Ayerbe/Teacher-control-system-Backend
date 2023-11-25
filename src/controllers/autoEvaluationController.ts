@@ -33,12 +33,16 @@ export class AutoEvaluationController{
     }
   }
   static async getAutoEvaluations(req:Request,res:Response){
-    try{
-      const response =await AutoEvaluation.find();
-      res.status(200).json(response)
+    //Filtrar por periodo.year y periodo.semester
+    const year = req.query.year;
+    const semester = req.query.semester;
 
-    }catch(error){
-      res.status(500).json({error:error});
+    const autoevaluations = await AutoEvaluation.find({ 'period.year': year , 'period.semester': semester });
+    if(!autoevaluations){
+      res.status(404).json({message:"AutoEvaluations not found"});
+    }
+    else{
+      res.status(200).json({data:autoevaluations});
     }
   }
 

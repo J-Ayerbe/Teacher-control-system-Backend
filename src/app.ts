@@ -11,22 +11,18 @@ import express from 'express';
 import dbConnection from './config/dbConfig';
 import { educatorRouter } from './routes/educatorRoute';
 import { notificationRouter } from './routes/notificationRouter';
-import cors from 'cors'
 import cookieParser  from "cookie-parser";
 import { authRouter } from './routes/authRouter';
 import { errorHandler } from './helpers/errorHandler';
 import helmet from "helmet";
+import { server }from './webSocket';
 
 const app = express();
-
 dbConnection();
 app.use(helmet());
-app.use(cors({
-    origin: 'http://localhost:5173',
-    credentials: true,
-}));
 app.use(express.json());
 app.use(cookieParser());
+
 
 app.use('/api/educators', educatorRouter);
 app.use('/api/autoEvaluations', autoEvaluationRoute)
@@ -35,4 +31,9 @@ app.use('/api/auth', authRouter);
 app.use(errorHandler);
 app.listen(3000, () => {
     console.log('Server is running on port 3000');
+});
+
+
+server.listen(3001, () => {
+    console.log('Server is running on port 3001');
 });

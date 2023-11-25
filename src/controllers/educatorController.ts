@@ -4,6 +4,8 @@ import { tryCatchFn } from "./../helpers/customTryCatch";
 import { NextFunction, Request, Response } from "express";
 import { Educator } from "../models/educatorModel";
 import { EducatorRole } from '../models/interfaces/interfaces';
+import { eventEmitter } from '../webSocket';
+
 
 export class EducatorController {
   static getEducatorsByRole = tryCatchFn(async (req: Request, res: Response) => {
@@ -154,5 +156,12 @@ export class EducatorController {
         year: req.query.year,
       });
     }
+  }
+
+  static async getNoti(_req: Request, res: Response){
+    // En tu controlador en el servidor en el puerto 3000
+    // Puedes emitir un evento para enviar un mensaje al servidor WebSocket
+    eventEmitter.emit('enviarMensajeWebSocket', 'Hola desde el controlador');
+    res.status(200).json({message: "Mensaje enviado"});
   }
 }

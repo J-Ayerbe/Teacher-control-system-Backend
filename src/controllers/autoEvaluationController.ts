@@ -32,7 +32,15 @@ export class AutoEvaluationController{
       res.status(500).json({ error: error });
     }
   }
+  static async getAutoEvaluations(req:Request,res:Response){
+    try{
+      const response =await AutoEvaluation.find();
+      res.status(200).json(response)
 
+    }catch(error){
+      res.status(500).json({error:error});
+    }
+  }
 
   // PeriodController
   static async getPeriods(req: Request, res: Response) {

@@ -16,9 +16,16 @@ import { authRouter } from './routes/authRouter';
 import { errorHandler } from './helpers/errorHandler';
 import helmet from "helmet";
 import { server }from './webSocket';
+import cors from "cors"
 
 const app = express();
 dbConnection();
+const corsOptions = {
+  origin: 'http://localhost:5173',
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());

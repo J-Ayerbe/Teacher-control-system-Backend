@@ -32,7 +32,7 @@ export const addAutoEvalSchema = z.object({
   state: z.enum(["En ejecución","Terminado","Suspendido"]),
   puntuation: z.number().int().gte(0).lte(100),
   period: z.object({
-    idPeriod: z.string().min(5).max(30),
+    idPeriod: z.string().min(1).max(10),
     name: z.string().min(5).max(30),
     year: z.string().min(4).max(4),
     semester:   z.number().int().gte(1).lte(2),

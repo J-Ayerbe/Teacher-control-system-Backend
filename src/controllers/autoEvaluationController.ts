@@ -64,7 +64,7 @@ export class AutoEvaluationController{
     populate([
       {path: 'evaluator'},
       {path: 'evaluated'},
-      {path: 'labour'}
+      {path: 'labour', populate: {path: 'labourType'}}
     ]).exec();
 
     if(!autoevaluations){

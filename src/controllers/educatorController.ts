@@ -163,7 +163,7 @@ export class EducatorController {
         populate: [
           { path: "evaluator" },
           { path: "evaluated"},
-          { path: "labour"},
+          { path: "labour", populate: {path: 'labourType'}},
         ],
       },
     ]).exec();

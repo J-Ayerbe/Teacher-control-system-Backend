@@ -62,16 +62,16 @@ export class AutoEvaluationController{
 
     const autoevaluations = await AutoEvaluation.find({ 'period.year': year , 'period.semester': semester }).
     populate([
-      {path: 'evaluator',select: 'firstName lastName docentType'},
-      {path: 'evaluated', select: 'firstName lastName docentType'},
-      {path: 'labour',select: 'nameWork'}
+      {path: 'evaluator'},
+      {path: 'evaluated'},
+      {path: 'labour'}
     ]).exec();
 
     if(!autoevaluations){
       res.status(404).json({message:"AutoEvaluations not found"});
     }
     else{
-      res.status(200).json({data:autoevaluations});
+      res.status(200).json(autoevaluations);
     }
   }
 

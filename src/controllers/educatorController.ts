@@ -161,9 +161,9 @@ export class EducatorController {
           "period.semester": semester,
         },
         populate: [
-          { path: "evaluator", select: "firstName lastName docentType" },
-          { path: "evaluated", select: "firstName lastName docentType" },
-          { path: "labour", select: "nameWork" },
+          { path: "evaluator" },
+          { path: "evaluated"},
+          { path: "labour"},
         ],
       },
     ]).exec();
@@ -175,9 +175,7 @@ export class EducatorController {
         year: req.query.year,
       });
     } else {
-      res.status(200).json({
-        data: educator.autoEvaluations,
-      });
+      res.status(200).json(educator.autoEvaluations);
     }
   }
 

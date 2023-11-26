@@ -3,27 +3,31 @@ import { AppError } from "./../helpers/errorHandler";
 import { tryCatchFn } from "./../helpers/customTryCatch";
 import { NextFunction, Request, Response } from "express";
 import { Educator } from "../models/educatorModel";
-import { EducatorRole } from '../models/interfaces/interfaces';
-import { eventEmitter } from '../webSocket';
-
+import { EducatorRole } from "../models/interfaces/interfaces";
+import { eventEmitter } from "../webSocket";
 
 export class EducatorController {
-  static getEducatorsByRole = tryCatchFn(async (req: Request, res: Response) => {
-    let {role}= req.params
-    role = role.charAt(0).toUpperCase() + role.slice(1).toLowerCase();
-    const educators = await Educator.find({role:role}).populate([
-    { path: "labours" },
-    { path: "autoEvaluations" },
-    { path: "notifications" }
-  ]);
-    res.status(200).json(educators);
-  });
-
+  static getEducatorsByRole = tryCatchFn(
+    async (req: Request, res: Response) => {
+      let { role } = req.params;
+      role = role.charAt(0).toUpperCase() + role.slice(1).toLowerCase();
+      const educators = await Educator.find({ role: role }).populate([
+        { path: "labours" },
+        { path: "autoEvaluations" },
+        { path: "notifications" },
+      ]);
+      res.status(200).json(educators);
+    }
+  );
 
   static getEducatorById = tryCatchFn(
     async (req: Request, res: Response, next: NextFunction) => {
       const { id } = req.params;
-      const educator = await Educator.findById(id).populate("labours");
+      const educator = await Educator.findById(id).populate([
+        { path: "labours" },
+        { path: "autoEvaluations" },
+        { path: "notifications" },
+      ]);;
 
       if (!educator) {
         return next(new AppError("Educator not found", 404));
@@ -49,7 +53,10 @@ export class EducatorController {
       }
 
       // Check the role
-      if (educator.role === EducatorRole.Coordinador || educator.role === EducatorRole.Decano) {
+      if (
+        educator.role === EducatorRole.Coordinador ||
+        educator.role === EducatorRole.Decano
+      ) {
         return next(
           new AppError(
             "No tienes permitido  actualizar el rol a este educador",
@@ -87,22 +94,25 @@ export class EducatorController {
   }
 
   static async addAutoEvaluation(req: Request, res: Response) {
-    const data = req.body;
+    try {
+      const data = req.body;
     // Buscamos al educador por su id
-    const educator = await Educator.findById(data.educatorId);
+    const educator = await Educator.findById(data.evaluated);
     if (!educator) {
-      res.status(404).json({ message: "Educator not found" });
-    } else {
-      // Agregamos la autoevaluación al educador
-      const autoevaluacionId =
-        await AutoEvaluationController.createAutoEvaluation(req, res);
-      if (!autoevaluacionId) {
-        res.status(404).json({ message: "AutoEvaluation not created" });
-      } else {
-        educator.autoEvaluations.push(autoevaluacionId);
-        await educator.save();
-        res.status(200).json({ message: "AutoEvaluation added" });
-      }
+      return res.status(404).json({ message: "Educator not found" });
+    }
+    // Agregamos la autoevaluación al educador
+    const autoevaluacionId =
+      await AutoEvaluationController.createAutoEvaluation(req, res);
+    if (!autoevaluacionId) {
+      return res.status(500).json({ message: "No se ha podido crear la autoevaluación " });
+    }
+    educator.autoEvaluations.push(autoevaluacionId);
+    await educator.save();
+    return res.status(200).json({ message: "AutoEvaluation added" });
+    } catch (error){
+        return res.status(500).json({ message: "No se ha podido crear la autoevaluación " })
+
     }
   }
 
@@ -156,15 +166,15 @@ export class EducatorController {
       });
     } else {
       res.status(200).json({
-        data: educator.autoEvaluations
+        data: educator.autoEvaluations,
       });
     }
   }
 
-  static async getNoti(_req: Request, res: Response){
+  static async getNoti(_req: Request, res: Response) {
     // En tu controlador en el servidor en el puerto 3000
     // Puedes emitir un evento para enviar un mensaje al servidor WebSocket
-    eventEmitter.emit('enviarMensajeWebSocket', 'Hola desde el controlador');
-    res.status(200).json({message: "Mensaje enviado"});
+    eventEmitter.emit("enviarMensajeWebSocket", "Hola desde el controlador");
+    res.status(200).json({ message: "Mensaje enviado" });
   }
 }

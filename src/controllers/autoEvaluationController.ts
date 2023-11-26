@@ -10,18 +10,41 @@ import { NextFunction, Request,Response } from 'express';
 
 export class AutoEvaluationController{
   // AutoEvaluationController
-  static async createAutoEvaluation(req: Request, _res: Response) {
+  static async createAutoEvaluation(req: any, _res: Response) {
     try {
-      const autoevaluacion =  new AutoEvaluation(req.body);
+      const { periodId, labourId, act, evaluated } = req.body;
+
+      const evaluator=req.uid;
+
+      const period=await PeriodController.getPeriodByIdHelper(periodId);
+      if(!period){
+        return null
+      }
+      console.log(period)
+      const autoevaluacion =  new AutoEvaluation({
+        period:{
+          year:period.year,
+          semester:period.semester,
+          startDate:period.startDate,
+          endDate:period.endDate,
+          name:period.name
+        },
+        labour: labourId,
+        act,
+        evaluated,
+        evaluator
+      });
       await autoevaluacion.save();
       return autoevaluacion._id;
     } catch (error) {
+      console.log(error)
       return null;
     }
   }
 
   static async updateAutoEvaluation(req: Request, res: Response) {
     try {
+
       const updateAutoEvaluation = await AutoEvaluation.findByIdAndUpdate(req.params.id, req.body, { new: true });
       if (!updateAutoEvaluation) {
         res.status(404).json({ message: "AutoEvaluation not found" });

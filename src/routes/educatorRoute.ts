@@ -1,3 +1,4 @@
+import { autoEvaluationSchema } from './../middlewares/schemas/autoEvaluationSchema';
 import { validarJWT } from './../middlewares/validateJWT';
 import { EducatorController } from './../controllers/educatorController';
 import validateSchema from "../middlewares/validateSchema";
@@ -17,11 +18,13 @@ educatorRouter.get('/getAutoEvalByPeriod', EducatorController.getAutoEvalByPerio
 
 educatorRouter.post('/addNotification',validateSchema(addNotificationSchema),[validarJWT,checkRole([decano])],EducatorController.addNotification)
 
-educatorRouter.post('/addAutoEvaluation',validateSchema(addAutoEvalSchema), EducatorController.addAutoEvaluation)
+
 
 educatorRouter.post('/addLabor',validateSchema(addLabourSchema),[validarJWT,checkRole([coordinador])],EducatorController.addLabor)
 
 educatorRouter.post('/getNotifications',[validarJWT,checkRole([coordinador])], EducatorController.getNotifications)
+
+educatorRouter.post('/addAutoEvaluation',[validateSchema(autoEvaluationSchema),validarJWT,checkRole([coordinador,decano])], EducatorController.addAutoEvaluation)
 
 educatorRouter.put('/updateEducator/:id',validateSchema(updateEducatorSchema),[validarJWT,checkRole([coordinador])], EducatorController.updateEducator)
 

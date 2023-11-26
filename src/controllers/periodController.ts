@@ -13,7 +13,15 @@ export class PeriodController{
             res.status(500).json({ error: error });
         }
     }
-
+  static async getPeriodByIdHelper(periodId) {
+        try {
+            const response = await fetch(`${apiPeriodUrl}/period/${periodId}`);
+            const data = await response.json();
+           return data;
+        } catch (error) {
+           return null;
+        }
+    }
    static async getPeriodById(req: any, res: any) {
         try {
             const response = await fetch(`${apiPeriodUrl}/period/${req.params.id}`);

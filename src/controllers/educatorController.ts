@@ -4,7 +4,7 @@ import { tryCatchFn } from "./../helpers/customTryCatch";
 import { NextFunction, Request, Response } from "express";
 import { Educator } from "../models/educatorModel";
 import { EducatorRole } from '../models/interfaces/interfaces';
-import { eventEmitter } from '../webSocket';
+import { eventEmitter } from '../helpers/ObserverNotifications';
 
 
 export class EducatorController {
@@ -138,15 +138,25 @@ export class EducatorController {
   }
 
   static async getAutoEvalByPeriod(req: Request, res: Response) {
-    const educator = await Educator.findById(req.query.id)
-      .populate({
+    const id = req.query.id;
+    const year = req.query.year;
+    const semester = req.query.semester;
+
+    const educator = await Educator.findById(id)
+    .populate([
+      {
         path: "autoEvaluations",
         match: {
-          "period.year": req.query.year,
-          "period.semester": req.query.semester,
+          "period.year": year,
+          "period.semester": semester,
         },
-      })
-      .exec();
+        populate: [
+          { path: "evaluator", select: "firstName lastName docentType" },
+          { path: "evaluated", select: "firstName lastName docentType" },
+          { path: "labour", select: "nameWork" },
+        ],
+      },
+    ]).exec();
 
     if (!educator) {
       res.status(404).json({
@@ -161,9 +171,10 @@ export class EducatorController {
     }
   }
 
-  static async getNoti(_req: Request, res: Response){
+  static async getNoti(req: Request, res: Response){
     // Puedes emitir un evento para enviar un mensaje al servidor WebSocket
-    eventEmitter.emit('enviarMensajeWebSocket', 'Hola desde el controlador');
+    const id = req.query.id;
+    eventEmitter.emit('enviarMensajeWebSocket', id);
     res.status(200).json({message: "Mensaje enviado"});
   }
 }

@@ -37,7 +37,13 @@ export class AutoEvaluationController{
     const year = req.query.year;
     const semester = req.query.semester;
 
-    const autoevaluations = await AutoEvaluation.find({ 'period.year': year , 'period.semester': semester });
+    const autoevaluations = await AutoEvaluation.find({ 'period.year': year , 'period.semester': semester }).
+    populate([
+      {path: 'evaluator',select: 'firstName lastName docentType'},
+      {path: 'evaluated', select: 'firstName lastName docentType'},
+      {path: 'labour',select: 'nameWork'}
+    ]).exec();
+
     if(!autoevaluations){
       res.status(404).json({message:"AutoEvaluations not found"});
     }

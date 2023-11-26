@@ -28,6 +28,6 @@
       "@middleware/*": ["src/middleware/*"]
     }
   },
-  "include": ["src//*", "__tests__//*"],
+  "include": ["src//*", "__tests__//*", "src/helpers/ObserverNotifications.ts"],
   "exclude": ["node_modules", "build"]
 }

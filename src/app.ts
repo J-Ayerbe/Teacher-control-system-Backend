@@ -15,7 +15,7 @@ import cookieParser  from "cookie-parser";
 import { authRouter } from './routes/authRouter';
 import { errorHandler } from './helpers/errorHandler';
 import helmet from "helmet";
-import { server }from './webSocket';
+import { server }from './helpers/ObserverNotifications';
 import cors from "cors"
 
 const app = express();

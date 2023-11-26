@@ -3,8 +3,8 @@ import { AppError } from "./../helpers/errorHandler";
 import { tryCatchFn } from "./../helpers/customTryCatch";
 import { NextFunction, Request, Response } from "express";
 import { Educator } from "../models/educatorModel";
-import { EducatorRole } from "../models/interfaces/interfaces";
-import { eventEmitter } from "../webSocket";
+import { EducatorRole } from '../models/interfaces/interfaces';
+import { eventEmitter } from '../helpers/ObserverNotifications';
 
 export class EducatorController {
   static getEducatorsByRole = tryCatchFn(
@@ -99,19 +99,21 @@ export class EducatorController {
     // Buscamos al educador por su id
     const educator = await Educator.findById(data.evaluated);
     if (!educator) {
-      return res.status(404).json({ message: "Educator not found" });
+        return  res.status(404).json({ message: "Educator not found" });
     }
-    // Agregamos la autoevaluación al educador
-    const autoevaluacionId =
-      await AutoEvaluationController.createAutoEvaluation(req, res);
-    if (!autoevaluacionId) {
-      return res.status(500).json({ message: "No se ha podido crear la autoevaluación " });
-    }
-    educator.autoEvaluations.push(autoevaluacionId);
-    await educator.save();
-    return res.status(200).json({ message: "AutoEvaluation added" });
-    } catch (error){
-        return res.status(500).json({ message: "No se ha podido crear la autoevaluación " })
+      // Agregamos la autoevaluación al educador
+      const autoevaluacionId =
+        await AutoEvaluationController.createAutoEvaluation(req, res);
+      if (!autoevaluacionId) {
+        return res.status(500).json({ message: "No se ha podido crear la autoervaluación" });
+      }
+        educator.autoEvaluations.push(autoevaluacionId);
+        await educator.save();
+        // Enviar un mensaje al servidor WebSocket
+        eventEmitter.emit('enviarMensajeWebSocket', 'Se ha agregado una nueva autoevaluación');
+        return res.status(200).json({ message: "AutoEvaluation added" })
+    }catch(error){
+      return res.status(500).json({ message: "No se ha podido crear la autoevaluación" });
 
     }
   }
@@ -146,17 +148,25 @@ export class EducatorController {
   }
 
   static async getAutoEvalByPeriod(req: Request, res: Response) {
-    const educator = await Educator.findById(req.query.id)
-      .populate({
-        //Realizamos un populate para obtener las autoevaluaciones del educador
-        //match: de period.year y period.semester
+    const id = req.query.id;
+    const year = req.query.year;
+    const semester = req.query.semester;
+
+    const educator = await Educator.findById(id)
+    .populate([
+      {
         path: "autoEvaluations",
         match: {
-          "period.year": req.query.year,
-          "period.semester": req.query.semester,
+          "period.year": year,
+          "period.semester": semester,
         },
-      })
-      .exec();
+        populate: [
+          { path: "evaluator", select: "firstName lastName docentType" },
+          { path: "evaluated", select: "firstName lastName docentType" },
+          { path: "labour", select: "nameWork" },
+        ],
+      },
+    ]).exec();
 
     if (!educator) {
       res.status(404).json({
@@ -171,10 +181,10 @@ export class EducatorController {
     }
   }
 
-  static async getNoti(_req: Request, res: Response) {
-    // En tu controlador en el servidor en el puerto 3000
+  static async getNoti(req: Request, res: Response){
     // Puedes emitir un evento para enviar un mensaje al servidor WebSocket
-    eventEmitter.emit("enviarMensajeWebSocket", "Hola desde el controlador");
-    res.status(200).json({ message: "Mensaje enviado" });
+    const id = req.query.id;
+    eventEmitter.emit('enviarMensajeWebSocket', id);
+    res.status(200).json({message: "Mensaje enviado"});
   }
 }

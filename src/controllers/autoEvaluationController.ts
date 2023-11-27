@@ -92,12 +92,13 @@ export class AutoEvaluationController{
 
         // Array para almacenar el conteo de autoevaluaciones por identification
         const evaluated: Array<{
-           total: number; completed: number; 
+           total: number; completed: number; Percentage: number; 
            identification: string;
            firstName: string; 
            lastName: string; 
-           role: string 
+           role: string ;
            labour: string;
+
           }> = [];
 
         // Iterar sobre las autoevaluaciones
@@ -114,7 +115,9 @@ export class AutoEvaluationController{
                   firstName: evaluation.evaluated.firstName, 
                   lastName: evaluation.evaluated.lastName,
                   role: evaluation.evaluated.role,
-                  labour: evaluation.labour.nameWork
+                  labour: evaluation.labour.nameWork,
+                  Percentage: 0
+
                  };
                 evaluated.push(countInfo);
             }
@@ -126,10 +129,15 @@ export class AutoEvaluationController{
                 // Incrementar el contador de autoevaluaciones completas
                 countInfo.completed++;
                 completedAutoevaluations++;
-            }
+            }      
 
             totalAutoevaluations++;
         });
+
+        evaluated.forEach((info) => {
+            info.Percentage = (info.completed / info.total) * 100 || 0;
+        });
+
 
         // Calcular el promedio
         const percentageCompleted = (completedAutoevaluations / totalAutoevaluations) * 100 || 0;

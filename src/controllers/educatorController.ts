@@ -185,4 +185,6 @@ export class EducatorController {
     eventEmitter.emit('enviarMensajeWebSocket', id);
     res.status(200).json({message: "Mensaje enviado"});
   }
+
+
 }

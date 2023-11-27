@@ -9,21 +9,20 @@ export const userSchema = z.object({
     message: "Password must be at most 15 characters long",
   }),
   docentType:z.enum(["Tiempo Completo", "Planta", "Cátedra"]),
-  idType: z.string().min(2).max(10),
+  idType: z.enum( ["CC", "CE", "PA","Otro"]),
   title: z.string(),
   firstName: z.string().min(1).max(50),
   lastName: z.string().min(3).max(50),
 }).strict("Se enviaron campos que no están permitidos")
 
 export const updateEducatorSchema = z.object({
-  email: z.string().email("Not a valid email"),
+  email: z.string().email("El email no es válido"),
   isActive: z.boolean(),
   docentType:z.enum(["Tiempo Completo", "Planta", "Cátedra"]),
-  idType: z.string().min(2).max(10),
+  idType:z.enum( ["CC", "CE", "PA","Otro"]),
   title: z.string(),
   firstName: z.string().min(1).max(50),
   lastName: z.string().min(3).max(50),
-  identification: z.string().min(5).max(11),
 }).strict("Se enviaron campos que no están permitidos")
 
 

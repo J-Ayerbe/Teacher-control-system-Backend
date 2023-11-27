@@ -1,3 +1,4 @@
+import { getLabourFromAutoEvaluation } from './../middlewares/getLabourAutoEvaluation';
 import { AutoEvaluationController } from './../controllers/autoEvaluationController';
 import { Router} from 'express'
 import validateSchema from "../middlewares/validateSchema";
@@ -6,6 +7,10 @@ import { labourSchema, labourUpdateSchema } from '../middlewares/schemas/labourS
 import { validarJWT } from '../middlewares/validateJWT';
 import checkRole from '../middlewares/checkRole';
 import { coordinador } from '../helpers/roles';
+import { docente } from '../helpers/roles';
+import { decano } from '../helpers/roles';
+
+import validateAutoEvalSchema from '../middlewares/validateSchemaAutoEvalUpdate';
 
 
 
@@ -33,14 +38,16 @@ autoEvaluationRoute.put('/labour/:id',[validateSchema(labourUpdateSchema),valida
 
 autoEvaluationRoute.delete('/labour/:id', AutoEvaluationController.deleteLabour)
 //AutoEvaluations
-autoEvaluationRoute.put('/updateAutoEvaluation/:id', AutoEvaluationController.updateAutoEvaluation)
+autoEvaluationRoute.put('/updateAutoEvaluation/:id',[validarJWT,checkRole([coordinador,docente])], AutoEvaluationController.updateAutoEvaluation)
 
-autoEvaluationRoute.post('/createAutoEvaluation', AutoEvaluationController.createAutoEvaluation)
+autoEvaluationRoute.post('/createAutoEvaluation',[validarJWT,checkRole([coordinador,decano])], AutoEvaluationController.createAutoEvaluation)
 
-autoEvaluationRoute.get('/getAutoEvaluations', AutoEvaluationController.getAutoEvaluations)
+autoEvaluationRoute.get('/getAutoEvaluations',[validarJWT,checkRole([coordinador,decano])], AutoEvaluationController.getAutoEvaluations)
 
-autoEvaluationRoute.get('/getAllAutoEvaluations', AutoEvaluationController.getAllAutoEvaluations)
+autoEvaluationRoute.get('/getAllAutoEvaluations',[validarJWT,checkRole([coordinador,decano])], AutoEvaluationController.getAllAutoEvaluations)
 
-autoEvaluationRoute.get('/getAutoEvaluations/:id', AutoEvaluationController.getAutoEvaluationById)
+autoEvaluationRoute.get('/getAutoEvaluations/:id',[validarJWT], AutoEvaluationController.getAutoEvaluationById)
 
-autoEvaluationRoute.get('/getPercentageAutoEvaluations',AutoEvaluationController.getPercentageAutoEvaluations)
+autoEvaluationRoute.get('/getPercentageAutoEvaluations',[validarJWT,checkRole([coordinador,decano])],AutoEvaluationController.getPercentageAutoEvaluations)
+
+autoEvaluationRoute.get('/getAutoEvaluationsByDocentId',[validarJWT],AutoEvaluationController.GetAutoEvalDocentId)

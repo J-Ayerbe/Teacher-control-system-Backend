@@ -2,9 +2,9 @@ import { getUserFromDatabase } from './getLastUserData';
 import jwt from "jsonwebtoken";
 import { jwtSecret, jwtSecretRefresh } from "../config/jwtConfig";
 
-export const generateToken = (uid: string, role: string): Promise<string> => {
+export const generateToken = (uid: string, role: string,docentType?:string): Promise<string> => {
   return new Promise((resolve, reject) => {
-    const payload = { uid, role };
+    const payload = { uid, role,docentType };
     const options = {
       expiresIn: "15s",
     };
@@ -44,10 +44,14 @@ export const renewToken = (refreshToken: string): Promise<string> => {
       } else {
         try {
 
-
+          let token;
           const latestUser:any = await getUserFromDatabase(user.uid);
+          if(latestUser.docentType){
+               token = await generateToken(latestUser._id, latestUser.role, latestUser.docentType);
+          }else{
+               token = await generateToken(latestUser._id, latestUser.role);
+          }
 
-          const token = await generateToken(latestUser._id, latestUser.role);
           resolve(token);
         } catch (error) {
           reject("Could not generate token");

@@ -32,6 +32,7 @@ const EducatorSchema = new Schema<IEducator>({
   idType: {
     type: String,
     required: true,
+    enum: ["CC", "CE", "PA","Otro"],
   },
   isActive: {
     type: Boolean,

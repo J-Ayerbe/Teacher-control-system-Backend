@@ -11,34 +11,54 @@ export class AutoEvaluationController {
   // AutoEvaluationController
   static async createAutoEvaluation(_req: any, _res: Response) {
     try {
-
     } catch (error) {
       console.log(error);
       return null;
     }
   }
+  static async GetAutoEvalDocentId(req: any, res: Response) {
+    try {
+      const uid = req.uid;
+      const autoevaluations = await AutoEvaluation.find({
+        evaluated: uid,
+      }).populate([
+        { path: "evaluator", select: "firstName lastName docentType" },
+        { path: "evaluated", select: "firstName lastName docentType" },
+        { path: "labour", select: "nameWork assignedHours labourType" },
+      ]);
 
-static async updateAutoEvaluation(req: Request, res: Response) {
-  try {
-    console.log(req.body,req.params.id)
-    const updateAutoEvaluation = await AutoEvaluation.findOneAndUpdate(
-      { _id: req.params.id },
-      { $set: req.body },
-      { new: true } // Esta opción es para devolver el documento actualizado
-    );
-    if (!updateAutoEvaluation) {
-      res.status(404).json({ message: "AutoEvaluation not found" });
-    } else {
-      res.status(200).json({ message: "AutoEvaluation updated" });
+      // Poblar labourType por separado
+      await AutoEvaluation.populate(autoevaluations, {
+        path: "labour.labourType",
+        select: " description",
+      });
+
+      res.status(200).json(autoevaluations);
+    } catch (error) {
+      res.status(500).json({ error: error });
     }
-  } catch (error) {
-    res.status(500).json({ error: error });
   }
-}
+  static async updateAutoEvaluation(req: any, res: Response) {
+    try {
+      const role = req.role;
+
+      console.log(req.body, req.params.id);
+      const updateAutoEvaluation = await AutoEvaluation.findOneAndUpdate(
+        { _id: req.params.id },
+        { $set: req.body },
+        { new: true } // Esta opción es para devolver el documento actualizado
+      );
+      if (!updateAutoEvaluation) {
+        res.status(404).json({ message: "AutoEvaluation not found" });
+      } else {
+        res.status(200).json({ message: "AutoEvaluation updated" });
+      }
+    } catch (error) {
+      res.status(500).json({ error: error });
+    }
+  }
 
   static async getAllAutoEvaluations(req: Request, res: Response) {
-
-
     const autoevaluations = await AutoEvaluation.find()
       .populate([
         { path: "evaluator", select: "firstName lastName docentType" },
@@ -47,9 +67,7 @@ static async updateAutoEvaluation(req: Request, res: Response) {
       ])
       .exec();
 
-
-      res.status(200).json(autoevaluations );
-
+    res.status(200).json(autoevaluations);
   }
   static async getAutoEvaluations(req: Request, res: Response) {
     //Filtrar por periodo.year y periodo.semester
@@ -73,97 +91,111 @@ static async updateAutoEvaluation(req: Request, res: Response) {
       res.status(200).json({ data: autoevaluations });
     }
   }
-  static async getAutoEvaluationById(req: Request, res: Response) {
-    const autoevaluation = await AutoEvaluation.findById(req.params.id)
-      .populate([
-        { path: "evaluator", select: "firstName lastName docentType" },
-        { path: "evaluated", select: "firstName lastName docentType" },
-        { path: "labour", select: "nameWork" },
-      ])
-      .exec();
-    if (!autoevaluation) {
-      res.status(404).json({ message: "AutoEvaluation not found" });
-    } else {
+  static async getAutoEvaluationById(req: any, res: Response) {
+    const autoevaluation = await AutoEvaluation.findById(
+      req.params.id
+    ).populate([
+      { path: "evaluator", select: "firstName lastName docentType" },
+      { path: "evaluated", select: "firstName lastName docentType" },
+      { path: "labour", select: "nameWork assignedHours labourType" },
+    ]);
 
-      res.status(200).json( autoevaluation );
+    await AutoEvaluation.populate(autoevaluation, {
+      path: "labour.labourType",
+      select: " description",
+    });
+
+    if (req.role === "Docente" && autoevaluation.evaluated._id !== req.uid) {
+      return res
+        .status(403)
+        .json({ message: "No tienes acceso a este recurso" });
+    }
+    if (!autoevaluation) {
+      return res.status(404).json({ message: "AutoEvaluation not found" });
+    } else {
+      return res.status(200).json(autoevaluation);
     }
   }
 
   static async getPercentageAutoEvaluations(req: Request, res: Response) {
     try {
-        const year = req.query.year;
-        const semester = req.query.semester;
-        const autoevaluations = await AutoEvaluation.find({ 'period.year': year, 'period.semester': semester })
-            .populate([
-                { path: "evaluated" },
-                { path: "labour" }
-            ]).exec();
+      const year = req.query.year;
+      const semester = req.query.semester;
+      const autoevaluations = await AutoEvaluation.find({
+        "period.year": year,
+        "period.semester": semester,
+      })
+        .populate([{ path: "evaluated" }, { path: "labour" }])
+        .exec();
 
-        // Contador para el total de autoevaluaciones
-        let totalAutoevaluations = 0;
-        // Contador para el total de autoevaluaciones completas
-        let completedAutoevaluations = 0;
+      // Contador para el total de autoevaluaciones
+      let totalAutoevaluations = 0;
+      // Contador para el total de autoevaluaciones completas
+      let completedAutoevaluations = 0;
 
-        // Array para almacenar el conteo de autoevaluaciones por identification
-        const evaluated: Array<{
-           total: number; completed: number; 
-           identification: string;
-           firstName: string; 
-           lastName: string; 
-           role: string ;
-           labour: string;
+      // Array para almacenar el conteo de autoevaluaciones por identification
+      const evaluated: Array<{
+        total: number;
+        completed: number;
+        identification: string;
+        firstName: string;
+        lastName: string;
+        role: string;
+        labour: string;
+      }> = [];
 
-          }> = [];
+      // Iterar sobre las autoevaluaciones
+      autoevaluations.forEach((evaluation) => {
+        const identification = evaluation.evaluated.identification;
 
-        // Iterar sobre las autoevaluaciones
-        autoevaluations.forEach((evaluation) => {
-            const identification = evaluation.evaluated.identification;
+        // Incrementar el total de autoevaluaciones para esta identification
+        let countInfo = evaluated.find(
+          (info) => info.identification === identification
+        );
 
-            // Incrementar el total de autoevaluaciones para esta identification
-            let countInfo = evaluated.find((info) => info.identification === identification);
+        if (!countInfo) {
+          countInfo = {
+            total: 0,
+            completed: 0,
+            identification,
+            firstName: evaluation.evaluated.firstName,
+            lastName: evaluation.evaluated.lastName,
+            role: evaluation.evaluated.role,
+            labour: evaluation.labour.nameWork,
+          };
+          evaluated.push(countInfo);
+        }
 
-            if (!countInfo) {
-                countInfo = { 
-                  total: 0, completed: 0, 
-                  identification, 
-                  firstName: evaluation.evaluated.firstName, 
-                  lastName: evaluation.evaluated.lastName,
-                  role: evaluation.evaluated.role,
-                  labour: evaluation.labour.nameWork,
-                 };
-                evaluated.push(countInfo);
-            }
+        countInfo.total++;
 
-            countInfo.total++;
+        // Verificar si esta autoevaluación tiene results
+        if (evaluation.results) {
+          // Incrementar el contador de autoevaluaciones completas
+          countInfo.completed++;
+          completedAutoevaluations++;
+        }
 
-            // Verificar si esta autoevaluación tiene results
-            if (evaluation.results) {
-                // Incrementar el contador de autoevaluaciones completas
-                countInfo.completed++;
-                completedAutoevaluations++;
-            }      
+        totalAutoevaluations++;
+      });
 
-            totalAutoevaluations++;
-        });
+      // Calcular el promedio
+      const percentageCompleted =
+        (completedAutoevaluations / totalAutoevaluations) * 100 || 0;
 
+      // Crear un objeto de respuesta
+      const response = {
+        totalAutoevaluations,
+        completedAutoevaluations,
+        percentageCompleted,
+        evaluated,
+      };
 
-        // Calcular el promedio
-        const percentageCompleted = (completedAutoevaluations / totalAutoevaluations) * 100 || 0;
-
-        // Crear un objeto de respuesta
-        const response = {
-            totalAutoevaluations,
-            completedAutoevaluations,
-            percentageCompleted,
-            evaluated,
-        };
-
-        res.status(200).json(response);
+      res.status(200).json(response);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
+      console.error(error);
+      res.status(500).json({ error: "Internal Server Error" });
     }
-}
+  }
 
   // PeriodController
   static async getPeriods(req: Request, res: Response) {

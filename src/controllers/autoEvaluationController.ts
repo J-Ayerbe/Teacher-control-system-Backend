@@ -34,6 +34,21 @@ export class AutoEvaluationController {
       res.status(500).json({ error: error });
     }
   }
+  static async getAllAutoEvaluations(req: Request, res: Response) {
+
+
+    const autoevaluations = await AutoEvaluation.find()
+      .populate([
+        { path: "evaluator", select: "firstName lastName docentType" },
+        { path: "evaluated", select: "firstName lastName docentType" },
+        { path: "labour", select: "nameWork uid" },
+      ])
+      .exec();
+
+
+      res.status(200).json(autoevaluations );
+
+  }
   static async getAutoEvaluations(req: Request, res: Response) {
     //Filtrar por periodo.year y periodo.semester
     const year = req.query.year;
@@ -56,7 +71,21 @@ export class AutoEvaluationController {
       res.status(200).json({ data: autoevaluations });
     }
   }
-
+  static async getAutoEvaluationById(req: Request, res: Response) {
+    const autoevaluation = await AutoEvaluation.findById(req.params.id)
+      .populate([
+        { path: "evaluator", select: "firstName lastName docentType" },
+        { path: "evaluated", select: "firstName lastName docentType" },
+        { path: "labour", select: "nameWork" },
+      ])
+      .exec();
+    if (!autoevaluation) {
+      res.status(404).json({ message: "AutoEvaluation not found" });
+    } else {
+      console.log(autoevaluation)
+      res.status(200).json( autoevaluation );
+    }
+  }
   // PeriodController
   static async getPeriods(req: Request, res: Response) {
     return await PeriodController.getPeriods(req, res);

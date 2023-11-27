@@ -125,28 +125,25 @@ export class LabourController {
         },
       };
       const docentLabours = educator.labours;
-        const difference = labours
+      const difference = labours
         .filter((item) => !docentLabours.includes(item))
         .concat(docentLabours.filter((item) => !labours.includes(item)));
 
-      for(let labour of difference){
-        if(labour){
-          const labourHasAutoeval = await AutoEvaluation.findOne({
-            labour,
-          });
-          if (labourHasAutoeval) {
-            labours.push(labour)
-          }
+      for (let labour of difference) {
+        const labourHasAutoeval = await AutoEvaluation.findOne({
+          labour,
+          evaluated: uid,
+        });
+        if (labourHasAutoeval) {
+          labours.push(labour);
         }
       }
 
       let labourPromises = labours.map((labourId) => Labour.findById(labourId));
       const laboursData = await Promise.all(labourPromises);
 
-
-
       for (let labour of laboursData) {
-         if (!labour) {
+        if (!labour) {
           throw new Error(`Labour with id ${labour._id} not found`);
         }
         if (labour.assignedHours > docentTypeHours[educatorType].max) {

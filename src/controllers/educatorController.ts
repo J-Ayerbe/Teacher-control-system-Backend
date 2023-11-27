@@ -235,8 +235,13 @@ export class EducatorController {
             { path: "labour", select: "nameWork" },
           ],
         },
-      ])
-      .exec();
+        populate: [
+          { path: "evaluator" },
+          { path: "evaluated"},
+          { path: "labour", populate: {path: 'labourType'}},
+        ],
+      },
+    ]).exec();
 
     if (!educator) {
       res.status(404).json({
@@ -245,9 +250,7 @@ export class EducatorController {
         year: req.query.year,
       });
     } else {
-      res.status(200).json({
-        data: educator.autoEvaluations,
-      });
+      res.status(200).json(educator.autoEvaluations);
     }
   }
 
@@ -257,4 +260,6 @@ export class EducatorController {
     eventEmitter.emit("enviarMensajeWebSocket", id);
     res.status(200).json({ message: "Mensaje enviado" });
   }
+
+
 }

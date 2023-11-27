@@ -18,22 +18,24 @@ export class AutoEvaluationController {
     }
   }
 
-  static async updateAutoEvaluation(req: Request, res: Response) {
-    try {
-      const updateAutoEvaluation = await AutoEvaluation.findByIdAndUpdate(
-        req.params.id,
-        req.body,
-        { new: true }
-      );
-      if (!updateAutoEvaluation) {
-        res.status(404).json({ message: "AutoEvaluation not found" });
-      } else {
-        res.status(200).json({ message: "AutoEvaluation updated" });
-      }
-    } catch (error) {
-      res.status(500).json({ error: error });
+static async updateAutoEvaluation(req: Request, res: Response) {
+  try {
+    console.log(req.body,req.params.id)
+    const updateAutoEvaluation = await AutoEvaluation.findOneAndUpdate(
+      { _id: req.params.id },
+      { $set: req.body },
+      { new: true } // Esta opción es para devolver el documento actualizado
+    );
+    if (!updateAutoEvaluation) {
+      res.status(404).json({ message: "AutoEvaluation not found" });
+    } else {
+      res.status(200).json({ message: "AutoEvaluation updated" });
     }
+  } catch (error) {
+    res.status(500).json({ error: error });
   }
+}
+
   static async getAllAutoEvaluations(req: Request, res: Response) {
 
 
@@ -82,7 +84,7 @@ export class AutoEvaluationController {
     if (!autoevaluation) {
       res.status(404).json({ message: "AutoEvaluation not found" });
     } else {
-      console.log(autoevaluation)
+
       res.status(200).json( autoevaluation );
     }
   }

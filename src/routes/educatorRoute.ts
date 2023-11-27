@@ -2,7 +2,7 @@ import { autoEvaluationSchema } from './../middlewares/schemas/autoEvaluationSch
 import { validarJWT } from './../middlewares/validateJWT';
 import { EducatorController } from './../controllers/educatorController';
 import validateSchema from "../middlewares/validateSchema";
-import {updateEducatorSchema, addNotificationSchema, addLabourSchema} from "../middlewares/schemas/educatorSchema";
+import {updateEducatorSchema, addAutoEvalSchema, addNotificationSchema, addLabourSchema} from "../middlewares/schemas/educatorSchema";
 import { Router } from 'express'
 import checkRole from '../middlewares/checkRole';
 import { coordinador, decano } from '../helpers/roles';
@@ -29,4 +29,3 @@ educatorRouter.post('/addAutoEvaluation',[validateSchema(autoEvaluationSchema),v
 educatorRouter.put('/updateEducator/:id',validateSchema(updateEducatorSchema),[validarJWT,checkRole([coordinador])], EducatorController.updateEducator)
 
 educatorRouter.get('/getNoti',EducatorController.getNoti)
-

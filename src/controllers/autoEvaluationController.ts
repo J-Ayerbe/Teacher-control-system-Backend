@@ -158,7 +158,6 @@ export class AutoEvaluationController{
 }
 
 
-
   // PeriodController
   static async getPeriods(req: Request, res: Response) {
     return await PeriodController.getPeriods(req, res);

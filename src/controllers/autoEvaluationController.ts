@@ -82,7 +82,7 @@ export class AutoEvaluationController{
         const autoevaluations = await AutoEvaluation.find({ 'period.year': year, 'period.semester': semester })
             .populate([
                 { path: "evaluated" },
-                { path: "labour", populate: { path: 'labourType' } }
+                { path: "labour" }
             ]).exec();
 
         // Contador para el total de autoevaluaciones
@@ -91,7 +91,14 @@ export class AutoEvaluationController{
         let completedAutoevaluations = 0;
 
         // Array para almacenar el conteo de autoevaluaciones por identification
-        const evaluated: Array<{ total: number; completed: number; identification: string; firstName: string; role: string }> = [];
+        const evaluated: Array<{
+           total: number; completed: number; 
+           identification: string;
+           firstName: string; 
+           lastName: string; 
+           role: string 
+           labour: string;
+          }> = [];
 
         // Iterar sobre las autoevaluaciones
         autoevaluations.forEach((evaluation) => {
@@ -101,7 +108,14 @@ export class AutoEvaluationController{
             let countInfo = evaluated.find((info) => info.identification === identification);
 
             if (!countInfo) {
-                countInfo = { total: 0, completed: 0, identification, firstName: evaluation.evaluated.firstName, role: evaluation.evaluated.role };
+                countInfo = { 
+                  total: 0, completed: 0, 
+                  identification, 
+                  firstName: evaluation.evaluated.firstName, 
+                  lastName: evaluation.evaluated.lastName,
+                  role: evaluation.evaluated.role,
+                  labour: evaluation.labour.nameWork
+                 };
                 evaluated.push(countInfo);
             }
 

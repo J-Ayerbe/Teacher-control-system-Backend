@@ -1,5 +1,4 @@
 import { AutoEvaluation } from "./../models/autoEvaluationModel";
-import { AutoEvaluation } from "./../models/interfaces/interfaces";
 import { tryCatchFn } from "./../helpers/customTryCatch";
 import { AppError } from "./../helpers/errorHandler";
 import { NextFunction, Request, Response } from "express";

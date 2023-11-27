@@ -9,7 +9,7 @@ import { NextFunction, Request, Response } from "express";
 
 export class AutoEvaluationController {
   // AutoEvaluationController
-  static async createAutoEvaluation(req: any, res: Response) {
+  static async createAutoEvaluation(_req: any, _res: Response) {
     try {
 
     } catch (error) {
@@ -88,6 +88,83 @@ static async updateAutoEvaluation(req: Request, res: Response) {
       res.status(200).json( autoevaluation );
     }
   }
+
+  static async getPercentageAutoEvaluations(req: Request, res: Response) {
+    try {
+        const year = req.query.year;
+        const semester = req.query.semester;
+        const autoevaluations = await AutoEvaluation.find({ 'period.year': year, 'period.semester': semester })
+            .populate([
+                { path: "evaluated" },
+                { path: "labour" }
+            ]).exec();
+
+        // Contador para el total de autoevaluaciones
+        let totalAutoevaluations = 0;
+        // Contador para el total de autoevaluaciones completas
+        let completedAutoevaluations = 0;
+
+        // Array para almacenar el conteo de autoevaluaciones por identification
+        const evaluated: Array<{
+           total: number; completed: number; 
+           identification: string;
+           firstName: string; 
+           lastName: string; 
+           role: string ;
+           labour: string;
+
+          }> = [];
+
+        // Iterar sobre las autoevaluaciones
+        autoevaluations.forEach((evaluation) => {
+            const identification = evaluation.evaluated.identification;
+
+            // Incrementar el total de autoevaluaciones para esta identification
+            let countInfo = evaluated.find((info) => info.identification === identification);
+
+            if (!countInfo) {
+                countInfo = { 
+                  total: 0, completed: 0, 
+                  identification, 
+                  firstName: evaluation.evaluated.firstName, 
+                  lastName: evaluation.evaluated.lastName,
+                  role: evaluation.evaluated.role,
+                  labour: evaluation.labour.nameWork,
+                 };
+                evaluated.push(countInfo);
+            }
+
+            countInfo.total++;
+
+            // Verificar si esta autoevaluación tiene results
+            if (evaluation.results) {
+                // Incrementar el contador de autoevaluaciones completas
+                countInfo.completed++;
+                completedAutoevaluations++;
+            }      
+
+            totalAutoevaluations++;
+        });
+
+
+        // Calcular el promedio
+        const percentageCompleted = (completedAutoevaluations / totalAutoevaluations) * 100 || 0;
+
+        // Crear un objeto de respuesta
+        const response = {
+            totalAutoevaluations,
+            completedAutoevaluations,
+            percentageCompleted,
+            evaluated,
+        };
+
+        res.status(200).json(response);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
+
   // PeriodController
   static async getPeriods(req: Request, res: Response) {
     return await PeriodController.getPeriods(req, res);
@@ -123,8 +200,8 @@ static async updateAutoEvaluation(req: Request, res: Response) {
   static async deleteLabour(req: Request, res: Response) {
     return await LabourController.deleteLabour(req, res);
   }
-  static async assignLabour(req: Request, res: Response) {
-    return await LabourController.assignLabour(req, res);
+  static async assignLabour(req: Request, res: Response, next: NextFunction) {
+    return await LabourController.assignLabour(req, res, next);
   }
   // NotificationController
   static async createNotification(req: Request, res: Response) {

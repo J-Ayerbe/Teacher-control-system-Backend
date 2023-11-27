@@ -1,10 +1,12 @@
+import { AutoEvaluation } from "./../models/autoEvaluationModel";
 import { AutoEvaluationController } from "./autoEvaluationController";
 import { AppError } from "./../helpers/errorHandler";
 import { tryCatchFn } from "./../helpers/customTryCatch";
 import { NextFunction, Request, Response } from "express";
 import { Educator } from "../models/educatorModel";
-import { EducatorRole } from '../models/interfaces/interfaces';
-import { eventEmitter } from '../helpers/ObserverNotifications';
+import { EducatorRole } from "../models/interfaces/interfaces";
+import { eventEmitter } from "../helpers/ObserverNotifications";
+import { PeriodController } from "./periodController";
 
 export class EducatorController {
   static getEducatorsByRole = tryCatchFn(
@@ -12,8 +14,23 @@ export class EducatorController {
       let { role } = req.params;
       role = role.charAt(0).toUpperCase() + role.slice(1).toLowerCase();
       const educators = await Educator.find({ role: role }).populate([
-        { path: "labours" },
-        { path: "autoEvaluations" },
+        {
+          path: "labours",
+          populate: {
+            path: "labourType",
+          },
+        },
+        {
+          path: "autoEvaluations",
+          populate: [
+            {
+              path: "labour",
+            },
+            {
+              path: "evaluator",
+            },
+          ],
+        },
         { path: "notifications" },
       ]);
       res.status(200).json(educators);
@@ -24,10 +41,25 @@ export class EducatorController {
     async (req: Request, res: Response, next: NextFunction) => {
       const { id } = req.params;
       const educator = await Educator.findById(id).populate([
-        { path: "labours" },
-        { path: "autoEvaluations" },
+         {
+          path: "labours",
+          populate: {
+            path: "labourType",
+          },
+        },
+        {
+          path: "autoEvaluations",
+          populate: [
+            {
+              path: "labour",
+            },
+            {
+              path: "evaluator",
+            },
+          ],
+        },
         { path: "notifications" },
-      ]);;
+      ]);
 
       if (!educator) {
         return next(new AppError("Educator not found", 404));
@@ -93,28 +125,65 @@ export class EducatorController {
     }
   }
 
-  static async addAutoEvaluation(req: Request, res: Response) {
+  static async addAutoEvaluation(req: any, res: Response, next: NextFunction) {
     try {
       const data = req.body;
-    // Buscamos al educador por su id
-    const educator = await Educator.findById(data.evaluated);
-    if (!educator) {
-        return  res.status(404).json({ message: "Educator not found" });
-    }
-      // Agregamos la autoevaluación al educador
-      const autoevaluacionId =
-        await AutoEvaluationController.createAutoEvaluation(req, res);
-      if (!autoevaluacionId) {
-        return res.status(500).json({ message: "No se ha podido crear la autoervaluación" });
+      const educator = await Educator.findById(data.evaluated);
+      if (!educator) {
+        return res.status(404).json({ message: "Educator not found" });
       }
-        educator.autoEvaluations.push(autoevaluacionId);
-        await educator.save();
-        // Enviar un mensaje al servidor WebSocket
-        eventEmitter.emit('enviarMensajeWebSocket', 'Se ha agregado una nueva autoevaluación');
-        return res.status(200).json({ message: "AutoEvaluation added" })
-    }catch(error){
-      return res.status(500).json({ message: "No se ha podido crear la autoevaluación" });
 
+      const { periodId, labourId, act, evaluated } = req.body;
+
+      const evaluator = req.uid;
+
+      const period = await PeriodController.getPeriodByIdHelper(periodId);
+      if (!period) {
+        return next(new AppError("El periodo asignado no existe", 404));
+      }
+      const existsAutoEvaluation = await AutoEvaluation.findOne({
+        "period.semester": period.semester,
+        labour: labourId,
+        evaluator: evaluator,
+        evaluated: evaluated,
+      });
+
+      if (existsAutoEvaluation) {
+        return next(
+          new AppError(
+            "Ya se ha asignado una autoevaluacion a ese periodo con esa labor",
+            404
+          )
+        );
+      }
+
+      const autoevaluacion = new AutoEvaluation({
+        period: {
+          year: period.year,
+          semester: period.semester,
+          startDate: period.startDate,
+          endDate: period.endDate,
+          name: period.name,
+        },
+        labour: labourId,
+        act,
+        evaluated,
+        evaluator,
+      });
+      await autoevaluacion.save();
+
+      educator.autoEvaluations.push(autoevaluacion._id);
+      await educator.save();
+      // Enviar un mensaje al servidor WebSocket
+      eventEmitter.emit(
+        "enviarMensajeWebSocket",
+        "Se ha agregado una nueva autoevaluación"
+      );
+      return res.status(200).json({ message: "AutoEvaluation added" });
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: "No se ha podido crear la autoevaluación" });
     }
   }
 
@@ -153,20 +222,21 @@ export class EducatorController {
     const semester = req.query.semester;
 
     const educator = await Educator.findById(id)
-    .populate([
-      {
-        path: "autoEvaluations",
-        match: {
-          "period.year": year,
-          "period.semester": semester,
+      .populate([
+        {
+          path: "autoEvaluations",
+          match: {
+            "period.year": year,
+            "period.semester": semester,
+          },
+          populate: [
+            { path: "evaluator", select: "firstName lastName docentType" },
+            { path: "evaluated", select: "firstName lastName docentType" },
+            { path: "labour", select: "nameWork" },
+          ],
         },
-        populate: [
-          { path: "evaluator", select: "firstName lastName docentType" },
-          { path: "evaluated", select: "firstName lastName docentType" },
-          { path: "labour", select: "nameWork" },
-        ],
-      },
-    ]).exec();
+      ])
+      .exec();
 
     if (!educator) {
       res.status(404).json({
@@ -181,10 +251,10 @@ export class EducatorController {
     }
   }
 
-  static async getNoti(req: Request, res: Response){
+  static async getNoti(req: Request, res: Response) {
     // Puedes emitir un evento para enviar un mensaje al servidor WebSocket
     const id = req.query.id;
-    eventEmitter.emit('enviarMensajeWebSocket', id);
-    res.status(200).json({message: "Mensaje enviado"});
+    eventEmitter.emit("enviarMensajeWebSocket", id);
+    res.status(200).json({ message: "Mensaje enviado" });
   }
 }

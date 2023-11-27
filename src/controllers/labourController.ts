@@ -1,3 +1,5 @@
+import { AutoEvaluation } from "./../models/autoEvaluationModel";
+import { AutoEvaluation } from "./../models/interfaces/interfaces";
 import { tryCatchFn } from "./../helpers/customTryCatch";
 import { AppError } from "./../helpers/errorHandler";
 import { NextFunction, Request, Response } from "express";
@@ -92,7 +94,7 @@ export class LabourController {
     }
   }
 
-  static async assignLabour(req: Request, res: Response) {
+  static async assignLabour(req: Request, res: Response, next: NextFunction) {
     try {
       const { uid, labours } = req.body; // assuming labours is an array of labour IDs
 
@@ -101,6 +103,7 @@ export class LabourController {
       if (!educator) {
         return res.status(404).json({ message: "Educator not found" });
       }
+
       const educatorType = educator.docentType;
 
       const docentTypeHours = {
@@ -121,12 +124,29 @@ export class LabourController {
           min: 2,
         },
       };
-      let labourPromises = labours.map((labourId) => Labour.findById(labourId));
+      const docentLabours = educator.labours;
+        const difference = labours
+        .filter((item) => !docentLabours.includes(item))
+        .concat(docentLabours.filter((item) => !labours.includes(item)));
 
+      for(let labour of difference){
+        if(labour){
+          const labourHasAutoeval = await AutoEvaluation.findOne({
+            labour,
+          });
+          if (labourHasAutoeval) {
+            labours.push(labour)
+          }
+        }
+      }
+
+      let labourPromises = labours.map((labourId) => Labour.findById(labourId));
       const laboursData = await Promise.all(labourPromises);
 
+
+
       for (let labour of laboursData) {
-        if (!labour) {
+         if (!labour) {
           throw new Error(`Labour with id ${labour._id} not found`);
         }
         if (labour.assignedHours > docentTypeHours[educatorType].max) {

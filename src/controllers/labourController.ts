@@ -93,7 +93,7 @@ export class LabourController {
     }
   }
 
-  static async assignLabour(req: Request, res: Response, next: NextFunction) {
+  static async assignLabour(req: Request, res: Response, _next: NextFunction) {
     try {
       const { uid, labours } = req.body; // assuming labours is an array of labour IDs
 

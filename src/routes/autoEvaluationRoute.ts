@@ -1,4 +1,3 @@
-import { getLabourFromAutoEvaluation } from './../middlewares/getLabourAutoEvaluation';
 import { AutoEvaluationController } from './../controllers/autoEvaluationController';
 import { Router} from 'express'
 import validateSchema from "../middlewares/validateSchema";
@@ -9,8 +8,6 @@ import checkRole from '../middlewares/checkRole';
 import { coordinador } from '../helpers/roles';
 import { docente } from '../helpers/roles';
 import { decano } from '../helpers/roles';
-
-import validateAutoEvalSchema from '../middlewares/validateSchemaAutoEvalUpdate';
 
 
 

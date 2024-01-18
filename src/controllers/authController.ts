@@ -3,8 +3,6 @@ import {
   tokenCookieOptions,
 } from "./../config/cookiesConfig";
 import {
-  generateRefreshToken,
-  generateToken,
   generateTokenAndRefreshToken,
 } from "./../helpers/jwt";
 import { tryCatchFn } from "./../helpers/customTryCatch";

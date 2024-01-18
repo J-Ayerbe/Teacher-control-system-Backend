@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
 
 
  const checkRole=(authorizedRoles)=> async (req, res: Response, next: NextFunction) => {

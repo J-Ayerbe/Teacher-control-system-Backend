@@ -29,7 +29,7 @@ const LabourTypeSchema = new Schema<ILabourType>({
 
 LabourTypeSchema.set('toJSON', {
   versionKey: false,
-  transform: function (doc, ret) {
+  transform: function (_doc, ret) {
     // remove these props when object is serialized
      ret.uid = ret._id;
     delete ret._id;
@@ -37,7 +37,7 @@ LabourTypeSchema.set('toJSON', {
 });
 
 LabourTypeSchema.set('toObject', {
-  transform: (document, returnedObject) => {
+  transform: (_document, returnedObject) => {
     returnedObject.uid = returnedObject._id
     delete returnedObject._id
     delete returnedObject.__v

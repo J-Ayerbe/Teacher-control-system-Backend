@@ -40,7 +40,6 @@ export class AutoEvaluationController {
   }
   static async updateAutoEvaluation(req: any, res: Response) {
     try {
-      const role = req.role;
 
       console.log(req.body, req.params.id);
       const updateAutoEvaluation = await AutoEvaluation.findOneAndUpdate(
@@ -58,7 +57,7 @@ export class AutoEvaluationController {
     }
   }
 
-  static async getAllAutoEvaluations(req: Request, res: Response) {
+  static async getAllAutoEvaluations(_req: Request, res: Response) {
     const autoevaluations = await AutoEvaluation.find()
       .populate([
         { path: "evaluator", select: "firstName lastName docentType" },

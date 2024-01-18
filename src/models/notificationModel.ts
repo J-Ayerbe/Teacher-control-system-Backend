@@ -23,7 +23,7 @@ const NotificationSchema = new Schema<INotification>({
 
 NotificationSchema.set('toJSON', {
   versionKey: false,
-  transform: function (doc, ret) {
+  transform: function (_doc, ret) {
     // remove these props when object is serialized
      ret.uid = ret._id;
 
@@ -31,7 +31,7 @@ NotificationSchema.set('toJSON', {
 });
 
 NotificationSchema.set('toObject', {
-  transform: (document, returnedObject) => {
+  transform: (_document, returnedObject) => {
     returnedObject.uid = returnedObject._id
     delete returnedObject._id
     delete returnedObject.__v
